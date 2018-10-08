@@ -7,12 +7,20 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
-  <h3>Ionic Menu Starter</h3>
+<ion-content class="card-background-page">
+  <ion-card>
+    <ion-card-header>
+      관심 있는 게임을 구독해보세요.
+    </ion-card-header>
+    <ion-card-content>
+      원하는 게임이 없다면 저희에게 알려주세요!
+    </ion-card-content>
+  </ion-card>
 
-  <p>
-    If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will show you the way.
-  </p>
+  <ion-card *ngFor="let game of games" tappable (click)="addGame(game.id)">
+    <img src="{{game.img}}"/>
+    <div class="card-title">{{game.name}}</div>
+    <div class="card-subtitle">{{game.regCnt}} 명 구독중</div>
+  </ion-card>
 
-  <button ion-button secondary menuToggle>Toggle Menu</button>
 </ion-content>

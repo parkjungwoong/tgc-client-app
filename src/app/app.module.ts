@@ -8,6 +8,14 @@ import { ListPage } from '../pages/list/list';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import {apiCallInterceptor} from "../common/apiCallInterceptor";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
+import {LocalDataUtils} from "../common/localDataUtils";
+import {CommonUtils} from "../common/commonUtils";
+import {ApiCall} from "../common/apiCall";
+import {UserData} from "../datas/user-data";
+import {GamesService} from "../services/gamesService";
+import {IonicStorageModule} from "@ionic/storage";
 
 @NgModule({
   declarations: [
@@ -17,7 +25,9 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp),
+    HttpClientModule,
+    IonicStorageModule.forRoot(),
+    IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -28,7 +38,13 @@ import { SplashScreen } from '@ionic-native/splash-screen';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    {provide:HTTP_INTERCEPTORS,useClass: apiCallInterceptor,multi:true},
+    UserData,
+    ApiCall,
+    GamesService,
+    CommonUtils,
+    LocalDataUtils
   ]
 })
 export class AppModule {}
