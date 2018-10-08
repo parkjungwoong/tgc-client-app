@@ -16,6 +16,7 @@ import {ApiCall} from "../common/apiCall";
 import {UserData} from "../datas/user-data";
 import {GamesService} from "../services/gamesService";
 import {IonicStorageModule} from "@ionic/storage";
+import {Firebase} from "@ionic-native/firebase";
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import {IonicStorageModule} from "@ionic/storage";
     ApiCall,
     GamesService,
     CommonUtils,
-    LocalDataUtils
+    LocalDataUtils,
+    Firebase
   ]
 })
 export class AppModule {}

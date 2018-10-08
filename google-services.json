@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "251559180525",
+    "firebase_url": "https://tgc-app.firebaseio.com",
+    "project_id": "tgc-app",
+    "storage_bucket": "tgc-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251559180525:android:cb7f1c64ccd82772",
+        "android_client_info": {
+          "package_name": "com.bmdevs.tgc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251559180525-52u5tj4jintpu9uah26qn168pmoh617u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bmdevs.tgc",
+            "certificate_hash": "0b08b6cbcc12df7babd83a7bcda40901d633e724"
+          }
+        },
+        {
+          "client_id": "251559180525-av8ks60vp7gmk219tp7taa2ftng63ltn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-VGDcu-xC9hopdvLnhVCZQfM7vtyTalE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251559180525-av8ks60vp7gmk219tp7taa2ftng63ltn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
