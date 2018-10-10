@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {AlertController, LoadingController} from "ionic-angular";
-import {EatConst} from "./eatConst";
+import {COM_CONST} from "../const/COM_CONST";
+import {SERVER} from "../const/SERVER";
 
 @Injectable()
 export class CommonUtils {
@@ -14,37 +15,33 @@ export class CommonUtils {
 
   /**
    * 알럿창 출력
+   * ex) showAlert.present();
    * @param {string} title
    * @param {string} message
    */
   showAlert(title:string,message:string) {
 
-    if(title == '') title = EatConst.ALERT_TITLE;
+    if(title == '') title = COM_CONST.ALERT_TITLE;
 
-    const alert = this.alertCtrl.create({
+    return this.alertCtrl.create({
       title: title,
       subTitle: message,
       buttons: ['확인']
     });
-
-    alert.present();
   }
 
   /**
    * 로딩 출력
+   * ex) showLoading.present();
    * @param {string} loadingMessage 로딩 메시지
    */
   showLoading(loadingMessage:string) {
 
-    if(loadingMessage == '') loadingMessage = EatConst.LOADING_DEFAULT_MESSAGE;
+    if(loadingMessage == '') loadingMessage = COM_CONST.LOADING_DEFAULT_MESSAGE;
 
-    const loader = this.loadingCtrl.create({
+    return this.loadingCtrl.create({
       content: loadingMessage
     });
-
-    loader.present();
-
-    return loader;
   }
 
   /**
@@ -59,7 +56,22 @@ export class CommonUtils {
         return encodeURIComponent(key) + '=' +
           encodeURIComponent(jsonObj[key]);
       }).join('&');
+  }
 
+  /**
+   * URL 파라미터 생성
+   * @param {SERVER} url 요청 URl
+   * @param {string[]} param 파라미터
+   * @returns {string} url
+   */
+  margeUrlParam(url:SERVER,param:string[]):string {
+    let result:string = url;
+
+    param.forEach(val => {
+      result = result.replace(COM_CONST.URL_PARAM_MARK,val);
+    });
+
+    return result;
   }
 
   isEmpty(obj:any):boolean {

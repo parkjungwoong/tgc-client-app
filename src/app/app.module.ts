@@ -17,11 +17,15 @@ import {UserData} from "../datas/user-data";
 import {GamesService} from "../services/gamesService";
 import {IonicStorageModule} from "@ionic/storage";
 import {Firebase} from "@ionic-native/firebase";
+import {UserService} from "../services/userService";
+import {ComService} from "../services/comService";
+import {MyListPage} from "../pages/myList/myList";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
+    MyListPage,
     ListPage
   ],
   imports: [
@@ -34,6 +38,7 @@ import {Firebase} from "@ionic-native/firebase";
   entryComponents: [
     MyApp,
     HomePage,
+    MyListPage,
     ListPage
   ],
   providers: [
@@ -41,9 +46,11 @@ import {Firebase} from "@ionic-native/firebase";
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     {provide:HTTP_INTERCEPTORS,useClass: apiCallInterceptor,multi:true},
+    GamesService,
+    UserService,
+    ComService,
     UserData,
     ApiCall,
-    GamesService,
     CommonUtils,
     LocalDataUtils,
     Firebase

@@ -3,7 +3,6 @@ import {ApiCall} from "../common/apiCall";
 import {CommonUtils} from "../common/commonUtils";
 import {Game} from "../vo/game";
 import {SERVER} from "../const/SERVER";
-import {COM_CONST} from "../const/COM_CONST";
 
 @Injectable()
 export class GamesService {
@@ -13,28 +12,51 @@ export class GamesService {
     private commonUtil:CommonUtils
   ){}
 
+  /**
+   * 구독 가능한 게임 조회
+   * @param {string} stNum 페이징 시작 번호
+   * @returns {Promise<Game[]>} 구독 가능 게임 목록
+   */
   getList(stNum:string): Promise<Game[]> {
+    let url = this.commonUtil.margeUrlParam(SERVER.GET_GAME_LIST,[stNum]);
 
-    return this.apiCall.request( SERVER.GET_GAME_LIST
-      ,{ "stNum" : stNum }
-      ,COM_CONST.HTTP_GET
-      ,false).then(value => {
-      let response = value[COM_CONST.COMMON_RES_RESULT];
-      return response;
+    return this.apiCall.get( url
+      ,true).then(value => {
+        return value;
     }).catch( err => {
-      return null;
+      return [];
     });
   }
 
-  addGame(id:string): Promise<any> {
-    return this.apiCall.request( SERVER.GET_GAME_LIST
-      ,{ "stNum" : id }
-      ,COM_CONST.HTTP_GET
-      ,false).then(value => {
-      let response = value[COM_CONST.COMMON_RES_RESULT];
-      return response;
+  /**
+   * 구독
+   * @param {string} id 게임 아이디
+   * @returns {Promise<boolean>} 성공 여부
+   */
+  addGame(id:string): Promise<boolean> {
+    return this.apiCall.post( SERVER.ADD_MY_LIST
+      ,{ "id" : id }
+      ,true)
+      .then(value => {
+        return true;
+      }).catch( err => {
+        return false;
+      });
+  }
+
+  /**
+   * 구독 목록 조회
+   * @param {string} stNum 페이징 시작 번호
+   * @returns {Promise<any>} 구독 목록
+   */
+  getMyList(stNum:string): Promise<any> {
+    let url = this.commonUtil.margeUrlParam(SERVER.GET_MY_LIST,[stNum]);
+
+    return this.apiCall.get( url
+      ,true).then(value => {
+      return value;
     }).catch( err => {
-      return null;
+      return [];
     });
   }
 }

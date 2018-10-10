@@ -19,18 +19,19 @@ export class HomePage {
   }
 
   getGameLst(stNum:number){
-    this.gamesService.getList(stNum+'').then(value => {
-      console.log(value);
-      value.forEach(item => {
+    this.gamesService.getList(stNum+'').then(val => {
+      val.forEach(item => {
         this.games.push(item);
       });
     });
   }
 
   addGame(id:string){
-
-    this.commonUtil.showAlert('알림','구독 완료!');
-
+    this.gamesService.addGame(id).then(val => {
+      if(val){
+        this.commonUtil.showAlert('구독 완료!','내 구독 리스트에서 확인해보세요.');
+      }
+    });
   }
 
 }
