@@ -20,13 +20,17 @@ import {Firebase} from "@ionic-native/firebase";
 import {UserService} from "../services/userService";
 import {ComService} from "../services/comService";
 import {MyListPage} from "../pages/myList/myList";
+import {LoginPage} from "../pages/logIn/login";
+import {regUserPage} from "../pages/regUser/regUser";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     MyListPage,
-    ListPage
+    ListPage,
+    LoginPage,
+    regUserPage
   ],
   imports: [
     BrowserModule,
@@ -39,7 +43,9 @@ import {MyListPage} from "../pages/myList/myList";
     MyApp,
     HomePage,
     MyListPage,
-    ListPage
+    ListPage,
+    LoginPage,
+    regUserPage
   ],
   providers: [
     StatusBar,

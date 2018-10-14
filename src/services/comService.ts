@@ -1,9 +1,6 @@
 import {Injectable} from "@angular/core";
 import {ApiCall} from "../common/apiCall";
-import {CommonUtils} from "../common/commonUtils";
 import {Game} from "../vo/game";
-import {SERVER} from "../const/SERVER";
-import {COM_CONST} from "../const/COM_CONST";
 import {Firebase} from "@ionic-native/firebase";
 import {UserService} from "./userService";
 import {Platform} from "ionic-angular";
@@ -23,8 +20,8 @@ export class ComService {
    * @returns {Promise<Game[]>}
    */
   getFireBaseToken(){
-    if(!this.platform.is('mobileweb')) {
-      this.firebase.getToken().then( token => {
+
+     /* this.firebase.getToken().then( token => {
         let userInfo:any = {
           id : 'test',
           device_token : token
@@ -40,7 +37,21 @@ export class ComService {
         };
         this.userService.updateInfo(userInfo);
       });
-    }
+
+      this.firebase.onNotificationOpen().subscribe(data => {
+
+        //todo : 노티 수신시 처리
+        console.log(JSON.stringify(data,null,2));
+        alert(JSON.stringify(data,null,2));
+
+        if(data.wasTapped){
+          console.log("Received in background");
+        } else {
+          console.log("Received in foreground");
+        };
+      });*/
   }
+
+
 
 }

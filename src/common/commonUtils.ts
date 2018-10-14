@@ -66,7 +66,6 @@ export class CommonUtils {
    */
   margeUrlParam(url:SERVER,param:string[]):string {
     let result:string = url;
-
     param.forEach(val => {
       result = result.replace(COM_CONST.URL_PARAM_MARK,val);
     });

@@ -20,9 +20,8 @@ export class GamesService {
   getList(stNum:string): Promise<Game[]> {
     let url = this.commonUtil.margeUrlParam(SERVER.GET_GAME_LIST,[stNum]);
 
-    return this.apiCall.get( url
-      ,true).then(value => {
-        return value;
+    return this.apiCall.get( url,true).then(value => {
+      return value;
     }).catch( err => {
       return [];
     });
@@ -30,12 +29,30 @@ export class GamesService {
 
   /**
    * 구독
-   * @param {string} id 게임 아이디
+   * @param {string} gameId 게임 아이디
+   * @param {string} userNo 회원 고유 번호
    * @returns {Promise<boolean>} 성공 여부
    */
-  addGame(id:string): Promise<boolean> {
-    return this.apiCall.post( SERVER.ADD_MY_LIST
-      ,{ "id" : id }
+  subscribe(gameId:string,userNo:string): Promise<boolean> {
+    return this.apiCall.post( SERVER.ADD_SUBSCRIBE
+      ,{ "gameId" : gameId,"userNo" : userNo }
+      ,true)
+      .then(value => {
+        return true;
+      }).catch( err => {
+        return false;
+      });
+  }
+
+  /**
+   * 구독 취소
+   * @param {string} userNo 회원 고유 번호
+   * @param {string} gameId 게임 아이디
+   * @returns {Promise<boolean>} 성공 여부
+   */
+  delSubscribe(userNo:string,gameId:string): Promise<boolean> {
+    return this.apiCall.post( SERVER.DEL_SUBSCRIBE
+      ,{ "gameId" : gameId,"userNo" : userNo }
       ,true)
       .then(value => {
         return true;
@@ -46,17 +63,17 @@ export class GamesService {
 
   /**
    * 구독 목록 조회
+   * @param {string} userNo 회원 고유 번호
    * @param {string} stNum 페이징 시작 번호
    * @returns {Promise<any>} 구독 목록
    */
-  getMyList(stNum:string): Promise<any> {
-    let url = this.commonUtil.margeUrlParam(SERVER.GET_MY_LIST,[stNum]);
+  getMyList(userNo:string,stNum:string): Promise<any> {
+    let url = this.commonUtil.margeUrlParam(SERVER.GET_MY_SUBSCRIBE,[userNo,stNum]);
 
-    return this.apiCall.get( url
-      ,true).then(value => {
+    return this.apiCall.get( url,true).then(value => {
       return value;
     }).catch( err => {
-      return [];
+      return false;
     });
   }
 }

@@ -13,6 +13,37 @@ export class UserService {
     private commonUtil:CommonUtils
   ){}
 
+
+  /**
+   * 로그인
+   * @param userInfo
+   * @returns {Promise<any>}
+   */
+  login(userInfo:any): Promise<any> {
+    return this.apiCall.post( SERVER.LOGIN
+      ,{ userInfo }
+      ,true).then(value => {
+      return value;
+    }).catch( err => {
+      return null;
+    });
+  }
+
+  /**
+   * 회원가입
+   * @param userInfo
+   * @returns {Promise<any>}
+   */
+  regUser(userInfo:any): Promise<any> {
+    return this.apiCall.post( SERVER.USER_ADD
+      ,{ userInfo }
+      ,true).then(value => {
+      return value;
+    }).catch( err => {
+      return false;
+    });
+  }
+
   /**
    * 회원 정보 갱신
    * @param userInfo 회원 정보
@@ -24,8 +55,7 @@ export class UserService {
     return this.apiCall.put( url
       ,{ "device_token" : userInfo.device_token }
       ,false).then(value => {
-      let response = value[COM_CONST.COMMON_RES_RESULT];
-      return response;
+      return value;
     }).catch( err => {
       return null;
     });

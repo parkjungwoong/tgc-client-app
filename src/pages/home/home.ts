@@ -26,10 +26,11 @@ export class HomePage {
     });
   }
 
-  addGame(id:string){
-    this.gamesService.addGame(id).then(val => {
+  addGame(gameId:string){
+    //todo : get userID
+    this.gamesService.subscribe(gameId,'').then(val => {
       if(val){
-        this.commonUtil.showAlert('구독 완료!','내 구독 리스트에서 확인해보세요.');
+        this.commonUtil.showAlert('구독 완료!','내 구독 리스트에서 확인해보세요.').present();
       }
     });
   }
