@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {ModalController, NavController} from 'ionic-angular';
 import {GamesService} from "../../services/gamesService";
-import {Game} from "../../vo/game";
+import {GameVO} from "../../vo/gameVO";
 import {CommonUtils} from "../../common/commonUtils";
+import {LoginPage} from "../logIn/login";
+import {GamePage} from "../game/game";
 
 @Component({
   selector: 'page-home',
@@ -10,12 +12,22 @@ import {CommonUtils} from "../../common/commonUtils";
 })
 export class HomePage {
 
-  games:Game[] = [];
+  games:GameVO[] = [];
 
   constructor(public navCtrl: NavController
               ,public gamesService: GamesService
+              ,private modalCtrl: ModalController
               ,public commonUtil:CommonUtils) {
     this.getGameLst(1);
+  }
+
+  //게임 상세 보기
+  showGameDetail(gameId:string){
+    //todo: 게임 상세 정보 조회
+    this.gamesService.selectGameInfo(gameId).then(value => {
+      this.modalCtrl.create(GamePage,{game:value}).present();
+    });
+
   }
 
   getGameLst(stNum:number){

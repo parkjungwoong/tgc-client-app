@@ -22,6 +22,8 @@ import {ComService} from "../services/comService";
 import {MyListPage} from "../pages/myList/myList";
 import {LoginPage} from "../pages/logIn/login";
 import {regUserPage} from "../pages/regUser/regUser";
+import {CalendarPage} from "../pages/calendar/calendar";
+import {GamePage} from "../pages/game/game";
 
 @NgModule({
   declarations: [
@@ -30,7 +32,9 @@ import {regUserPage} from "../pages/regUser/regUser";
     MyListPage,
     ListPage,
     LoginPage,
-    regUserPage
+    regUserPage,
+    CalendarPage,
+    GamePage
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,9 @@ import {regUserPage} from "../pages/regUser/regUser";
     MyListPage,
     ListPage,
     LoginPage,
-    regUserPage
+    regUserPage,
+    CalendarPage,
+    GamePage
   ],
   providers: [
     StatusBar,

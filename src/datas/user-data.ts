@@ -44,6 +44,8 @@ export class UserData {
   getUserInfo(): Promise<UserInfo> {
     return this.storage.get(this.USER_INFO).then((value) => {
       return value;
+    }).catch(err => {
+      return false;
     });
   };
 

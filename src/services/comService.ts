@@ -1,27 +1,28 @@
 import {Injectable} from "@angular/core";
 import {ApiCall} from "../common/apiCall";
-import {Game} from "../vo/game";
+import {GameVO} from "../vo/gameVO";
 import {Firebase} from "@ionic-native/firebase";
 import {UserService} from "./userService";
 import {Platform} from "ionic-angular";
+import {CommonUtils} from "../common/commonUtils";
 
 @Injectable()
 export class ComService {
 
   constructor(private apiCall:ApiCall
               ,private userService: UserService
+              ,private commonUtil:CommonUtils
               ,private firebase: Firebase
-              ,public platform: Platform
-  ){}
+              ,public platform: Platform){}
 
   /**
    * 회원 정보 갱신
    * @param userInfo 회원 정보
-   * @returns {Promise<Game[]>}
+   * @returns {Promise<GameVO[]>}
    */
   getFireBaseToken(){
 
-     /* this.firebase.getToken().then( token => {
+      this.firebase.getToken().then( token => {
         let userInfo:any = {
           id : 'test',
           device_token : token
@@ -49,9 +50,7 @@ export class ComService {
         } else {
           console.log("Received in foreground");
         };
-      });*/
+      });
   }
-
-
 
 }

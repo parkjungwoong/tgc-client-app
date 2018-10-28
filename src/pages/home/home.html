@@ -3,7 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home</ion-title>
+    <ion-title>검색</ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -17,7 +17,7 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngFor="let game of games" tappable (click)="addGame(game.id)">
+  <ion-card *ngFor="let game of games" tappable (click)="showGameDetail(game.id)">
     <img src="{{game.img}}"/>
     <div class="card-title">{{game.name}}</div>
     <div class="card-subtitle">{{game.regCnt}} 명 구독중</div>

@@ -4,6 +4,8 @@ import {GamesService} from "../../services/gamesService";
 import {CommonUtils} from "../../common/commonUtils";
 import {UserData} from "../../datas/user-data";
 import {LoginPage} from "../logIn/login";
+import {UserInfo} from "../../vo/userInfo";
+import {UserService} from "../../services/userService";
 
 @Component({
   selector: 'page-myList',
@@ -11,27 +13,37 @@ import {LoginPage} from "../logIn/login";
 })
 export class MyListPage {
 
-  subscribeList: Array<{gameName: string, gameId: string, img: string, regDt: string, isNew: boolean}> = [];
+  userInfo:UserInfo = {
+    custNo:''
+    ,id:''
+    ,name:'로그인이 필요합니다.'
+    ,email:''
+    ,password:''
+  };
+  subscribeList:Array<any>;
+  messageList:Array<any>;
+  segmentType:number;
 
   constructor(public navCtrl: NavController
               ,public alertCtrl: AlertController
               ,public gamesService: GamesService
+              ,public userService: UserService
               ,public commonUtil:CommonUtils
               ,private modalCtrl: ModalController
               ,private userData:UserData
-              ,private events: Events
-  ) {
+              ,private events: Events) {
+    this.segmentType = 0;
     //로그인 체크
     this.userData.hasLoggedIn().then(isLogin => {
       if(isLogin){
-        this.getMySubscribe('1');
+        this.initMyList().then();
       } else {
         this.showLogin();
       }
     });
 
     this.events.subscribe('user:login', value => {
-      this.getMySubscribe('1');
+      this.initMyList().then();
     });
 
     this.events.subscribe('user:logout', value => {
@@ -39,9 +51,16 @@ export class MyListPage {
     });
   }
 
+  async initMyList(){
+    this.userInfo = await this.userData.getUserInfo();
+    console.log('userInfo',this.userInfo);
+    this.subscribeList = await this.gamesService.getMyList(this.userInfo.custNo,1);
+    this.messageList = await this.userService.getMessageList(this.userInfo.custNo,1);
+  }
+
   //구독 리스트 가져오기
-  getMySubscribe(stNum:string){
-    this.gamesService.getMyList('userId',stNum).then(val => {
+  getMySubscribe(stNum:number){
+    this.gamesService.getMyList(this.userInfo.custNo, stNum).then(val => {
       if(val) {
         val.forEach( item => {
           this.subscribeList.push(item);
@@ -82,4 +101,6 @@ export class MyListPage {
   showLogin(){
     this.modalCtrl.create(LoginPage).present();
   }
+
+  //todo : 설정 페이지 호출 Navigation 이용하기
 }

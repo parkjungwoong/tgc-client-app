@@ -6,6 +6,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { HomePage } from '../pages/home/home';
 import {ComService} from "../services/comService";
 import {MyListPage} from "../pages/myList/myList";
+import {CalendarPage} from "../pages/calendar/calendar";
 
 @Component({
   templateUrl: 'app.html'
@@ -13,6 +14,8 @@ import {MyListPage} from "../pages/myList/myList";
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
+  //todo: 로그인 유무에 따라 RootPage 변경, 로그인하면 CalendarPage
+  //todo: 로그인 유무에 따라 RootPage 변경, 로그인하면 CalendarPage
   rootPage: any = HomePage;
 
   pages: Array<{title: string, component: any}>;
@@ -26,8 +29,9 @@ export class MyApp {
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'List', component: MyListPage }
+      { title: '캘린더', component: CalendarPage },
+      { title: '검색', component: HomePage },
+      { title: '내정보', component: MyListPage }
     ];
 
   }

@@ -3,6 +3,7 @@ import {ModalController, NavController, NavParams, ViewController} from 'ionic-a
 import {UserService} from "../../services/userService";
 import {UserData} from "../../datas/user-data";
 import {regUserPage} from "../regUser/regUser";
+import {CommonUtils} from "../../common/commonUtils";
 
 @Component({
   selector: 'page-login',
@@ -20,8 +21,8 @@ export class LoginPage {
               ,public viewCtrl: ViewController
               ,private userService: UserService
               ,private modalCtrl: ModalController
-              ,private userData: UserData
-  ) {
+              ,private commonUtil:CommonUtils
+              ,private userData: UserData) {
 
   }
 
@@ -30,11 +31,15 @@ export class LoginPage {
    */
   doLogin(){
     //todo : validation
-    //todo : 파라미터 값 interface로 변경
-    this.userService.login({}).then(val => {
-      this.userData.insertLoginInfo(val);
-      this.viewCtrl.dismiss(true);
+
+    this.loginProc().then(value => {
+      value ? this.dismiss(value) : this.commonUtil.showAlert('알림','로그인 실패').present();
     });
+  }
+
+  async loginProc(){
+    let userInfo = await this.userService.login(this.loginInfo);//로그인 요청
+    return userInfo ? await this.userData.insertLoginInfo(userInfo) : userInfo;
   }
 
   /**
@@ -45,7 +50,7 @@ export class LoginPage {
     this.modalCtrl.create(regUserPage).present();
   }
 
-  dismiss() {
-    this.viewCtrl.dismiss();
+  dismiss(flag) {
+    this.viewCtrl.dismiss(flag);
   }
 }

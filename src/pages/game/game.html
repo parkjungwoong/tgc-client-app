@@ -1,0 +1,35 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <button ion-button (click)="dismiss()">닫기</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <img src="{{game.img}}"/>
+    <ion-card-content>
+      <ion-card-title>
+        {{game.name}}
+      </ion-card-title>
+      <p>
+        {{game.content}}
+      </p>
+      <ion-row no-padding>
+        <ion-col>
+          <!--todo : 버튼 아이콘이랑 색 변경 하기 -->
+          <button ion-button clear small color="danger" icon-start (click)="addGame()">
+            <ion-icon name='star'></ion-icon>
+            구독
+          </button>
+        </ion-col>
+        <ion-col text-right>
+          <button ion-button clear small color="danger" icon-start>
+            <ion-icon name='share-alt'></ion-icon>
+            공유
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

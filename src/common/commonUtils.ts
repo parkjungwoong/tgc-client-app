@@ -76,12 +76,23 @@ export class CommonUtils {
   isEmpty(obj:any):boolean {
 
     if(typeof obj === 'string'){
-      return obj.length == 0 || obj == '' ? true : false;
+      return obj.length == 0 || obj == '';
     } else {
-      return obj === undefined || obj == null ? true : false;
+      return obj === undefined || obj == null;
+    }
+  }
+
+  getRandomNum(count:number):number {
+    let result:string = '';
+
+    for(let i=0; i<count; i++){
+      let num:string = Math.floor((Math.random() * 10) + 1)+'';
+      result += num;
     }
 
+    return Number(result);
   }
+
 
   /**
    * 전체 페이지 개수 반환

@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{currentYear}}년 {{currentMonth}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-card>
+    <ion-card-content>
+      <div class="subscribe-list">
+        <ion-col (click)="toggleEventHide('all')">전체</ion-col>
+        <ion-col *ngFor="let item of subscribeList" class="{{item.color}}" (click)="toggleEventHide(item.id)">{{item.name}}</ion-col>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <div class="calendar-body">
+    <ion-card>
+      <ion-card-header>
+        {{currentYear}}년 {{currentMonth}}
+      </ion-card-header>
+      <ion-card-content>
+
+          <ion-grid>
+            <ion-row class="calendar-header">
+              <ion-col class="weekday col-1 text-md-danger" >일</ion-col>
+              <ion-col class="weekday col-1">월</ion-col>
+              <ion-col class="weekday col-1">화</ion-col>
+              <ion-col class="weekday col-1">수</ion-col>
+              <ion-col class="weekday col-1">목</ion-col>
+              <ion-col class="weekday col-1">금</ion-col>
+              <ion-col class="weekday col-1">토</ion-col>
+            </ion-row>
+
+            <ion-row *ngFor="let item of calendarData">
+              <ion-col *ngFor="let s of item.day" class="col-1">{{s}}</ion-col>
+              <ion-col *ngFor="let s of item.event" class="event-title {{s.color}} col-{{s.col}}" (click)="eventDetail(s)">{{s.title}}</ion-col>
+            </ion-row>
+          </ion-grid>
+
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+</ion-content>

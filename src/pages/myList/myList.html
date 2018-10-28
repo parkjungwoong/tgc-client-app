@@ -3,18 +3,56 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>myList</ion-title>
+    <ion-title>내 정보</ion-title>
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="md-settings"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let item of subscribeList" tappable (click)="delMySubscribe(item)">
-      <ion-thumbnail item-start>
-        <img src="{{item.img}}"/>
-      </ion-thumbnail>
-      <h2>{{item.gameName}}</h2>
-      <p>구독일 : {{item.regDt}}</p>
+    <ion-item>
+      <ion-avatar item-start>
+        <!--todo : 유저 이미지 넣기 & ERR처리-->
+        <img src="../../assets/imgs/user.jpg">
+      </ion-avatar>
+      <h2>{{userInfo.name}}</h2>
+      <p>{{userInfo.email}}</p>
     </ion-item>
   </ion-list>
+
+  <!-- 세그먼트 바 -->
+  <div padding>
+    <ion-segment [(ngModel)]="segmentType">
+      <ion-segment-button value="0">
+        구독 정보
+      </ion-segment-button>
+      <ion-segment-button value="1">
+        메시지함
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="segmentType">
+    <ion-list *ngSwitchCase="0">
+      <ion-item *ngFor="let item of subscribeList" tappable (click)="delMySubscribe(item)">
+        <ion-thumbnail item-start>
+          <img src="{{item.img}}"/>
+        </ion-thumbnail>
+        <h2>{{item.gameName}}</h2>
+        <p>구독일 : {{item.regDt}}</p>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="1">
+      <ion-item *ngFor="let item of messageList" tappable>
+        <h2>{{item.title}}</h2>
+        <p>{{item.content}}</p>
+        <small>{{item.sendDt}}</small>
+      </ion-item>
+    </ion-list>
+  </div>
 </ion-content>

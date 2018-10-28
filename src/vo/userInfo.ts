@@ -1,19 +1,7 @@
 export interface UserInfo {
+  custNo:string;
   id:string;
-  nickname:string;
-  member_no:string;
+  name:string;
+  email:string;
   password:string;
-  password2:string;
-  join_date:string;
-  last_login:string;
-  point:string;
-  grade:string;
-  app_version:string;
-  device_token:string;
-  os_type:string;
-  user_status:string;
-  login_token:string;
-  marketing_agree:number;
-  marketing_agree_dt:string;
-  reg_gb:string;
 }
