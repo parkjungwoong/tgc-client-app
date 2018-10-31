@@ -73,6 +73,17 @@ export class CommonUtils {
     return result;
   }
 
+  /**
+   * 페이징 쿼리 추가 예) /record?offset=100&limit=25 100번째 부터 25개
+   * @param {number} offset 시작 번호
+   * @param {string} limit  최대 개수
+   * @returns {string} 페이징 쿼리스트링
+   */
+  getPagingQuery(offset:number,limit:string):string{
+    if(this.isEmpty(limit)) limit = COM_CONST.LIMIT+'';
+    return '?offset='+offset+'&limit='+limit;
+  }
+
   isEmpty(obj:any):boolean {
 
     if(typeof obj === 'string'){

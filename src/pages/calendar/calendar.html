@@ -20,10 +20,12 @@
   <div class="calendar-body">
     <ion-card>
       <ion-card-header>
-        {{currentYear}}년 {{currentMonth}}
+        <ion-col (click)="prevMonth()">이전</ion-col>
+        <ion-col>{{currentYear}}년 {{currentMonth}}</ion-col>
+        <ion-col (click)="nextMonth()">다음</ion-col>
+
       </ion-card-header>
       <ion-card-content>
-
           <ion-grid>
             <ion-row class="calendar-header">
               <ion-col class="weekday col-1 text-md-danger" >일</ion-col>

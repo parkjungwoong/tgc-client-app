@@ -7,6 +7,7 @@ import {CommonUtils} from "../../common/commonUtils";
 import {GameVO} from "../../vo/gameVO";
 import {LoginPage} from "../logIn/login";
 import {UserInfo} from "../../vo/userInfo";
+import {EventPage} from "../event/event";
 
 @Component({
   selector: 'page-calendar',
@@ -45,10 +46,6 @@ export class CalendarPage {
 
     this.events.subscribe('user:login', value => {
       this.initCalendar();
-    });
-
-    this.events.subscribe('user:logout', value => {
-      //todo: 초기화
     });
   }
 
@@ -104,8 +101,7 @@ export class CalendarPage {
     });
     let selectedGame = this.subscribeList.find((game) => { return game.id == selectedEvent.gameId});
 
-    //todo : 상세 보기 화면 개발하기, 이벤트 링크, 설명, 등
-    this.commonUtil.showAlert(selectedGame.name,selectedEvent.title).present();
+    this.modalCtrl.create(EventPage,{game:selectedGame,eventInfo:eventInfo}).present();
   }
 
   //색 세팅
@@ -264,18 +260,21 @@ export class CalendarPage {
     this.daysInThisMonth = [];
     this.daysInLastMonth = [];
     this.daysInNextMonth = [];
+
     this.currentMonth = this.monthNames[this.date.getMonth()];
     this.currentYear = this.date.getFullYear();
+
+    //현재 년월 세팅
     if(this.date.getMonth() === new Date().getMonth()) {
       this.currentDate = new Date().getDate();
     } else {
       this.currentDate = 999;
     }
 
-    var prevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);//지난달
+    let prevMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 0);//지난달
 
-    var firstDayThisMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();//이번달 1일의 요일 (*요일)
-    var prevNumOfDays = prevMonth.getDate();//저번달 마지막 날짜 (*일)
+    let firstDayThisMonth = new Date(this.date.getFullYear(), this.date.getMonth(), 1).getDay();//이번달 1일의 요일 (*요일)
+    let prevNumOfDays = prevMonth.getDate();//저번달 마지막 날짜 (*일)
     /**
      * ex) 이번달 달력의 저번달 일자 구하기
      *
@@ -287,25 +286,25 @@ export class CalendarPage {
      * 저번달 마지막 날짜(31일) - (이번달 첫 요일 인덱스(6) - 1) => 26 => 26일은 저번달 일요일임
      * 그럼 26 부터 31 까지 1씩 증가시켜서 배열에 넣으면 이번달 달력의 저번달 일자 구해짐
      */
-    var prevYearMonth = this.getYYYYMMDD('0',0);
-    for(var i = prevNumOfDays-(firstDayThisMonth-1); i <= prevNumOfDays; i++) {
+    let prevYearMonth = this.getYYYYMMDD('0',0);
+    for(let i = prevNumOfDays-(firstDayThisMonth-1); i <= prevNumOfDays; i++) {
       this.daysInLastMonth.push(prevYearMonth+i);
     }
 
-    var thisYearMonth = this.getYYYYMMDD('0',1);
-    var thisNumOfDays = new Date(this.date.getFullYear(), this.date.getMonth()+1, 0).getDate();
-    for (var j = 0; j < thisNumOfDays; j++) {
+    let thisYearMonth = this.getYYYYMMDD('0',1);
+    let thisNumOfDays = new Date(this.date.getFullYear(), this.date.getMonth()+1, 0).getDate();
+    for (let j = 0; j < thisNumOfDays; j++) {
       this.daysInThisMonth.push(thisYearMonth+j+1);
     }
 
-    var lastDayThisMonth = new Date(this.date.getFullYear(), this.date.getMonth()+1, 0).getDay();
+    let lastDayThisMonth = new Date(this.date.getFullYear(), this.date.getMonth()+1, 0).getDay();
     // var nextNumOfDays = new Date(this.date.getFullYear(), this.date.getMonth()+2, 0).getDate();
-    for (var k = 0; k < (6-lastDayThisMonth); k++) {
+    for (let k = 0; k < (6-lastDayThisMonth); k++) {
       this.daysInNextMonth.push(k+1);
     }
-    var totalDays = this.daysInLastMonth.length+this.daysInThisMonth.length+this.daysInNextMonth.length;
+    let totalDays = this.daysInLastMonth.length+this.daysInThisMonth.length+this.daysInNextMonth.length;
     if(totalDays<36) {
-      for(var l = (7-lastDayThisMonth); l < ((7-lastDayThisMonth)+7); l++) {
+      for(let l = (7-lastDayThisMonth); l < ((7-lastDayThisMonth)+7); l++) {
         this.daysInNextMonth.push(l);
       }
     }
@@ -331,5 +330,27 @@ export class CalendarPage {
     return Number(year+''+monthStr+''+date);
   }
 
-  //todo 이전, 다음 달 넘기는 기능
+  //다음 달 넘기는 기능
+  nextMonth(){
+    this.date = new Date(this.date.getFullYear(), this.date.getMonth()+2, 0);
+    this.getDaysOfMonth();
+    this.getEventList();
+    this.clearEventData();
+  }
+
+  //이전달
+  prevMonth(){
+    this.date = new Date(this.date.getFullYear(), this.date.getMonth(), 0);
+    this.getDaysOfMonth();
+    this.getEventList();
+    this.clearEventData();
+  }
+
+  clearEventData(){
+    this.subscribeList = [];
+    this.eventList = [];
+    this.rowDate = [];
+    this.calendarData = [];
+  }
+
 }

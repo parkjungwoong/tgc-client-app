@@ -16,10 +16,18 @@
 
   <ion-card>
     <ion-card-content>
-      <ion-input [(ngModel)]="loginInfo.id" type="text" placeholder="이메일"></ion-input>
-      <hr>
-      <ion-input [(ngModel)]="loginInfo.password" type="password" placeholder="비밀번호"></ion-input>
-      <button ion-button full small color="default" (click)="doLogin();">로그인</button>
+      <form #loginForm="ngForm" novalidate>
+        <ion-input [(ngModel)]="loginInfo.id" name="id" type="text" #id="ngModel" placeholder="이메일" required></ion-input>
+        <p ion-text [hidden]="loginInfo.id || !isSubmit" color="danger" padding-left>
+          아이디를 입력해주세요.
+        </p>
+        <hr>
+        <ion-input [(ngModel)]="loginInfo.password" name="password" type="password" placeholder="비밀번호" #password="ngModel" required></ion-input>
+        <p ion-text [hidden]="loginInfo.password || !isSubmit" color="danger" padding-left>
+          비밀번호를 입력해주세요.
+        </p>
+        <button ion-button full small color="default" type="submit" (click)="doLogin(loginForm);">로그인</button>
+      </form>
     </ion-card-content>
   </ion-card>
 
@@ -41,14 +49,14 @@
         </button>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid><!--
   <ion-grid>
     <ion-row>
       <ion-col col-12 (click)="regUserModal();">
         <button ion-button block>이메일로 회원가입</button>
       </ion-col>
     </ion-row>
-  </ion-grid>
+  </ion-grid>-->
 
 
 </ion-content>

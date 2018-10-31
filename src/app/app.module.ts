@@ -4,7 +4,6 @@ import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -24,17 +23,20 @@ import {LoginPage} from "../pages/logIn/login";
 import {regUserPage} from "../pages/regUser/regUser";
 import {CalendarPage} from "../pages/calendar/calendar";
 import {GamePage} from "../pages/game/game";
+import {SetPage} from "../pages/set/set";
+import {EventPage} from "../pages/event/event";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     MyListPage,
-    ListPage,
+    SetPage,
     LoginPage,
     regUserPage,
     CalendarPage,
-    GamePage
+    GamePage,
+    EventPage
   ],
   imports: [
     BrowserModule,
@@ -47,11 +49,12 @@ import {GamePage} from "../pages/game/game";
     MyApp,
     HomePage,
     MyListPage,
-    ListPage,
+    SetPage,
     LoginPage,
     regUserPage,
     CalendarPage,
-    GamePage
+    GamePage,
+    EventPage
   ],
   providers: [
     StatusBar,

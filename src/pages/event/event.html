@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <button ion-button (click)="dismiss()">닫기</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card>
+    <img src="{{game.img}}"/>
+    <ion-card-content>
+      <ion-card-title>
+        {{game.name}}
+      </ion-card-title>
+      <p>2018-10-20 ~ 2018-10-30</p>
+      <p>
+        <!--todo : 데이터 형태 정해지면 값 다시 세팅 하기-->
+        {{eventInfo.title}}
+      </p>
+      <ion-list>
+        <ion-item>
+          <ion-label>알림 설정</ion-label>
+          <ion-select [(ngModel)]="remindOpt" multiple="true" (ionChange)="addRemind()">
+            <ion-option value="2">2일전</ion-option>
+            <ion-option value="1">1일전</ion-option>
+            <ion-option value="0">당일</ion-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+      <ion-row no-padding>
+        <ion-col>
+          <button ion-button clear small color="danger" icon-start (click)="openWeb()">
+            <ion-icon name='share-alt'></ion-icon>
+            {{game.name}} 홈페이지
+          </button>
+        </ion-col>
+        <ion-col text-right>
+          <button ion-button clear small color="danger" icon-end>
+            <ion-icon name='share-alt'></ion-icon>
+            공유
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

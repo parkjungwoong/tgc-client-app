@@ -21,7 +21,6 @@ export class ComService {
    * @returns {Promise<GameVO[]>}
    */
   getFireBaseToken(){
-
       this.firebase.getToken().then( token => {
         let userInfo:any = {
           id : 'test',

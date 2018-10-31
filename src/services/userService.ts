@@ -68,10 +68,23 @@ export class UserService {
    * @returns {Promise<any>} 메시지 정보
    */
   getMessageList(userNo:string,offset:number): Promise<any> {
-    //todo : 페이징 추가하기 예) /record?offset=100&limit=25 100번째 부터 25개
     let url = this.commonUtil.margeUrlParam(SERVER.GET_MESSAGE_LIST,[userNo]);
+    url += this.commonUtil.getPagingQuery(offset,'');
 
     return this.apiCall.get( url,true).then(value => {
+      return value;
+    }).catch( err => {
+      return false;
+    });
+  }
+
+  /**
+   * 탈퇴
+   * @param {string} custNo 회원 번호
+   * @returns {Promise<any>}
+   */
+  deleteUser(custNo:string): Promise<any> {
+    return this.apiCall.delete( SERVER.USER_DEL,{ custNo: custNo},true).then(value => {
       return value;
     }).catch( err => {
       return false;

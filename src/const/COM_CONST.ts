@@ -12,4 +12,9 @@ export const enum COM_CONST {
   ,ALERT_TITLE = '알림'
   ,LOADING_DEFAULT_MESSAGE = '요청중 입니다.'
 
+  ,LIMIT = 10 //페이징 기본 값
+
+  ,SEGMENT_TYPE_SUBSCRIBE = 0
+  ,SEGMENT_TYPE_MESSAGE = 1
+
 }

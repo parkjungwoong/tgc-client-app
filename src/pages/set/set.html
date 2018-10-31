@@ -1,0 +1,41 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>설정</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="dismiss()">닫기</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-item-group>
+    <ion-item-divider color="light">계정 정보</ion-item-divider>
+    <ion-item>{{userInfo.name}}</ion-item>
+    <ion-item>연결 정보 : {{userInfo.thirdPartyApp}}</ion-item>
+  </ion-item-group>
+  <ion-item-group>
+    <ion-item-divider color="light">권한 설정</ion-item-divider>
+    <ion-item>
+      <ion-label>알림</ion-label>
+      <ion-toggle [(ngModel)]="userInfo.pushAgree" (ionChange)="authSet('0')"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label>마켓팅 동의</ion-label>
+      <ion-toggle [(ngModel)]="userInfo.marketing" (ionChange)="authSet('1')"></ion-toggle>
+    </ion-item>
+  </ion-item-group>
+  <ion-item-group>
+    <ion-item-divider color="light">약관 및 지원</ion-item-divider>
+    <ion-item tappable (click)="openWeb('0')">문의하기</ion-item>
+    <ion-item tappable (click)="openWeb('1')">서비스 약관</ion-item>
+    <ion-item tappable (click)="openWeb('2')">개인정보 처리방침</ion-item>
+  </ion-item-group>
+  <ion-item-group>
+    <ion-item-divider color="light">앱 정보</ion-item-divider>
+    <ion-item>버전 : </ion-item>
+  </ion-item-group>
+  <ion-list>
+    <ion-item tappable (click)="logout()">로그아웃</ion-item>
+    <ion-item tappable (click)="unRegUser()">탈퇴</ion-item>
+  </ion-list>
+</ion-content>

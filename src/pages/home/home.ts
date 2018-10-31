@@ -3,8 +3,8 @@ import {ModalController, NavController} from 'ionic-angular';
 import {GamesService} from "../../services/gamesService";
 import {GameVO} from "../../vo/gameVO";
 import {CommonUtils} from "../../common/commonUtils";
-import {LoginPage} from "../logIn/login";
 import {GamePage} from "../game/game";
+import {COM_CONST} from "../../const/COM_CONST";
 
 @Component({
   selector: 'page-home',
@@ -13,38 +13,36 @@ import {GamePage} from "../game/game";
 export class HomePage {
 
   games:GameVO[] = [];
+  offset:number = 1;
 
   constructor(public navCtrl: NavController
               ,public gamesService: GamesService
               ,private modalCtrl: ModalController
               ,public commonUtil:CommonUtils) {
-    this.getGameLst(1);
+    this.gamesService.getList(this.offset).then(val => {
+      this.games = val;
+      if(this.games.length == 0) this.commonUtil.showAlert('안내','준비중입니다..').present();
+    });
   }
 
   //게임 상세 보기
   showGameDetail(gameId:string){
-    //todo: 게임 상세 정보 조회
     this.gamesService.selectGameInfo(gameId).then(value => {
       this.modalCtrl.create(GamePage,{game:value}).present();
     });
-
   }
 
-  getGameLst(stNum:number){
-    this.gamesService.getList(stNum+'').then(val => {
-      val.forEach(item => {
-        this.games.push(item);
-      });
+  //더 보기
+  async loadMore(infiniteScroll){
+    this.offset += COM_CONST.LIMIT;
+    let newList = await this.gamesService.getList(this.offset);
+
+    if(newList.length == 0) infiniteScroll.enable(false);
+
+    newList.forEach( game => {
+      this.games.push(game);
     });
-  }
 
-  addGame(gameId:string){
-    //todo : get userID
-    this.gamesService.subscribe(gameId,'').then(val => {
-      if(val){
-        this.commonUtil.showAlert('구독 완료!','내 구독 리스트에서 확인해보세요.').present();
-      }
-    });
+    infiniteScroll.complete();
   }
-
 }

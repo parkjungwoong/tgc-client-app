@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 
-import { Events } from 'ionic-angular';
+import {Events, ModalController} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserInfo } from '../vo/userInfo'
+import {LoginPage} from "../pages/logIn/login";
 
 @Injectable()
 export class UserData {
@@ -13,16 +14,16 @@ export class UserData {
   private USER_INFO = 'userInfo';
 
   constructor(
-    private events: Events,
-    private storage: Storage
+    private events: Events
+    ,private storage: Storage
   ) {}
 
   //로그인 정보 저장
-  insertLoginInfo(userInfo: UserInfo): boolean {
+  async insertLoginInfo(userInfo: UserInfo) {
     console.debug('insertLoginInfo', JSON.stringify(userInfo,null,2));
-    this.storage.set(this.HAS_LOGGED_IN, true);
-    this.storage.set(this.USER_INFO, userInfo);
-    this.events.publish('user:login');
+    await this.storage.set(this.HAS_LOGGED_IN, true);
+    await this.storage.set(this.USER_INFO, userInfo);
+    await this.events.publish('user:login');
     return true;
   };
 
@@ -48,6 +49,12 @@ export class UserData {
       return false;
     });
   };
+
+  //로그인 체크와 로그인 정보 가져오기 동시
+  async checkAndGetUserInfo(): Promise<UserInfo> {
+    let isLogin = await this.hasLoggedIn();
+    return isLogin ? await this.getUserInfo() : null;
+  }
 
   //튜토리얼 봤는지 체크
   checkHasSeenTutorial(): Promise<string> {

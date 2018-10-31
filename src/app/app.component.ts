@@ -15,7 +15,6 @@ export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
   //todo: 로그인 유무에 따라 RootPage 변경, 로그인하면 CalendarPage
-  //todo: 로그인 유무에 따라 RootPage 변경, 로그인하면 CalendarPage
   rootPage: any = HomePage;
 
   pages: Array<{title: string, component: any}>;

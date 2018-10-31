@@ -4,6 +4,7 @@ import {UserService} from "../../services/userService";
 import {UserData} from "../../datas/user-data";
 import {regUserPage} from "../regUser/regUser";
 import {CommonUtils} from "../../common/commonUtils";
+import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'page-login',
@@ -15,6 +16,8 @@ export class LoginPage {
     id:'',
     password: ''
   };
+
+  isSubmit = false;
 
   constructor(public navCtrl: NavController
               ,public navParams: NavParams
@@ -29,12 +32,13 @@ export class LoginPage {
   /**
    * 로그인
    */
-  doLogin(){
-    //todo : validation
-
-    this.loginProc().then(value => {
-      value ? this.dismiss(value) : this.commonUtil.showAlert('알림','로그인 실패').present();
-    });
+  doLogin(form: NgForm){
+    this.isSubmit = true;
+    if (form.valid) {
+      this.loginProc().then(value => {
+        value ? this.dismiss(value) : this.commonUtil.showAlert('알림','로그인 실패').present();
+      });
+    }
   }
 
   async loginProc(){

@@ -17,10 +17,23 @@
     </ion-card-content>
   </ion-card>
 
+  <!--todo : virtualScroll 알아보기 -->
+ <!-- <ion-list [virtualScroll]="games" [approxItemHeight]="'88px'">
+    <ion-card *virtualItem="let game" tappable (click)="showGameDetail(game.id)">
+      <img [src]="game.img"/>
+      <div class="card-title">{{game.name}}</div>
+      <div class="card-subtitle">{{game.regCnt}} 명 구독중</div>
+    </ion-card>
+  </ion-list>-->
+
   <ion-card *ngFor="let game of games" tappable (click)="showGameDetail(game.id)">
     <img src="{{game.img}}"/>
     <div class="card-title">{{game.name}}</div>
     <div class="card-subtitle">{{game.regCnt}} 명 구독중</div>
   </ion-card>
+
+  <ion-infinite-scroll (ionInfinite)="loadMore($event)" loadingSpinner="bubbles" loadingText="잠시만요!...">
+    <ion-infinite-scroll-content></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 
 </ion-content>

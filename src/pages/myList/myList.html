@@ -5,7 +5,7 @@
     </button>
     <ion-title>내 정보</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only>
+      <button ion-button icon-only (click)="showSetPage()" *ngIf="userInfo.custNo != ''">
         <ion-icon name="md-settings"></ion-icon>
       </button>
     </ion-buttons>

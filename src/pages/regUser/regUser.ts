@@ -27,6 +27,7 @@ export class regUserPage {
    * 회원가입
    */
   regUser(){
+    //보류
     //todo: parameter interface로 변경
     //todo: validation 추가
     this.userService.regUser({}).then(val => {
