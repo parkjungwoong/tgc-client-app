@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Events, ModalController, NavController, NavParams} from 'ionic-angular';
+import {Events, ModalController, NavController, NavParams, Platform} from 'ionic-angular';
 import {GamesService} from "../../services/gamesService";
 import {UserData} from "../../datas/user-data";
 import {eventVO} from "../../vo/eventVO";
@@ -47,6 +47,8 @@ export class CalendarPage {
     this.events.subscribe('user:login', value => {
       this.initCalendar();
     });
+
+
   }
 
   initCalendar(){
@@ -77,8 +79,24 @@ export class CalendarPage {
   //필수 데이터 조회
   async getInitData(){
     this.userInfo = await this.userData.getUserInfo();
-    this.subscribeList = await this.gameService.getMyList(this.userInfo.custNo,1);//구독중인 게임
-    this.eventList = await this.gameService.getMyEvent(this.userInfo.custNo,1);//게임 이벤트 리스트 조회
+    this.subscribeList = await this.gameService.getMyList(this.userInfo.userNo,0);//구독중인 게임
+
+    if(this.subscribeList.length == 0) {
+      this.commonUtil.showAlert('','검색 메뉴에서 게임 구독을 먼저 해주세요.').present();
+      return false;
+    }
+    this.eventList = await this.gameService.getMyEvent(this.userInfo.userNo);//게임 이벤트 리스트 조회
+
+    this.eventList = this.eventList.map(value => {
+      //로컬 시간을 변경
+      let localDate = new Date(value.stDt);
+      value.stDt = this.dateToYYYYMMDDNumber(localDate.getFullYear(),localDate.getMonth()+1,localDate.getDate());
+
+      localDate = new Date(value.enDt);
+      value.enDt = this.dateToYYYYMMDDNumber(localDate.getFullYear(),localDate.getMonth()+1,localDate.getDate());
+
+      return value;
+    });
 
     return true;
   }
@@ -87,7 +105,7 @@ export class CalendarPage {
   toggleEventHide(gameId:string){
     this.eventList.forEach(event => {
       if(gameId == 'all') event.isHide = false;
-      if(gameId != 'all' && event.gameId == gameId) event.isHide = !event.isHide;
+      if(gameId != 'all' && event.gameInfo._id == gameId) event.isHide = !event.isHide;
     });
 
     this.setListEvent();
@@ -97,11 +115,11 @@ export class CalendarPage {
   eventDetail(eventInfo){
     if(this.commonUtil.isEmpty(eventInfo.eventId)) return;
     let selectedEvent = this.eventList.find((event) => {
-      return event.eventId == eventInfo.eventId;
+      return event._id == eventInfo.eventId;
     });
-    let selectedGame = this.subscribeList.find((game) => { return game.id == selectedEvent.gameId});
+    let selectedGame = this.subscribeList.find((game) => { return game._id == selectedEvent.gameInfo._id});
 
-    this.modalCtrl.create(EventPage,{game:selectedGame,eventInfo:eventInfo}).present();
+    this.modalCtrl.create(EventPage,{game:selectedGame,eventInfo:selectedEvent}).present();
   }
 
   //색 세팅
@@ -118,12 +136,11 @@ export class CalendarPage {
 
       //게임 이벤트 배경색 세팅
       for(let j=0;j<eventLen;j++){
-        if(this.eventList[j].gameId == this.subscribeList[i].id){
+        if(this.eventList[j].gameInfo._id == this.subscribeList[i]._id){
           this.eventList[j].titleColor = color;
         }
       }
     }
-    console.log('this.eventList',this.eventList);
   }
 
   //날짜 값 세팅
@@ -166,7 +183,7 @@ export class CalendarPage {
         events = events.filter( event => {
           let flag = true;
           for(let j=0; j<eventRow.length; j++){
-            if(event.eventId == eventRow[j].eventId) {
+            if(event._id == eventRow[j].eventId) {
               flag = false;
               break;
             }
@@ -204,7 +221,7 @@ export class CalendarPage {
         if( rowDay[i] == stDt ){
           let colCnt = this.getDateDif(stDt+'',curEvent.enDt+''); //일자 수만큼
           if(colCnt > rowMaxNum-pointer) colCnt = rowMaxNum-pointer;//남은 일보다 크면 남은 칸만큼만 지정
-          eventRow.push({title:curEvent.title, col:colCnt, color:curEvent.titleColor, eventId:curEvent.eventId, gameId:curEvent.gameId});
+          eventRow.push({title:curEvent.title, col:colCnt, color:curEvent.titleColor, eventId:curEvent._id, gameId:curEvent.gameInfo._id});
           pointer += colCnt;
           break;
         }
@@ -322,12 +339,15 @@ export class CalendarPage {
 
     let year = dateObj.getFullYear();
     let month = dateObj.getMonth()+1;
-    let monthStr = month+'';
 
-    if(month < 10) monthStr = '0'+month;
-    if(date.length != 2) date = '0'+date;
+    return this.dateToYYYYMMDDNumber(year,month,Number(date));
+  }
 
-    return Number(year+''+monthStr+''+date);
+  dateToYYYYMMDDNumber(year:number,month:number,date:number):number{
+    let monthStr = month < 10 ?  '0'+month : month+'';
+    let dateStr = date < 10 ? '0'+date : date+'';
+
+    return Number(year+''+monthStr+''+dateStr);
   }
 
   //다음 달 넘기는 기능

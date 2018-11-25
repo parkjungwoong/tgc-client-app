@@ -11,24 +11,24 @@
   <ion-item-group>
     <ion-item-divider color="light">계정 정보</ion-item-divider>
     <ion-item>{{userInfo.name}}</ion-item>
-    <ion-item>연결 정보 : {{userInfo.thirdPartyApp}}</ion-item>
+    <ion-item>연결 정보 : {{userInfo.thirdPartyLinkApp}}</ion-item>
   </ion-item-group>
   <ion-item-group>
     <ion-item-divider color="light">권한 설정</ion-item-divider>
     <ion-item>
       <ion-label>알림</ion-label>
-      <ion-toggle [(ngModel)]="userInfo.pushAgree" (ionChange)="authSet('0')"></ion-toggle>
+      <ion-toggle [(ngModel)]="userInfo.setInfo.pushAgree" (ionChange)="authSet('push')"></ion-toggle>
     </ion-item>
     <ion-item>
       <ion-label>마켓팅 동의</ion-label>
-      <ion-toggle [(ngModel)]="userInfo.marketing" (ionChange)="authSet('1')"></ion-toggle>
+      <ion-toggle [(ngModel)]="userInfo.setInfo.marketing" (ionChange)="authSet('marketing')"></ion-toggle>
     </ion-item>
   </ion-item-group>
   <ion-item-group>
     <ion-item-divider color="light">약관 및 지원</ion-item-divider>
-    <ion-item tappable (click)="openWeb('0')">문의하기</ion-item>
-    <ion-item tappable (click)="openWeb('1')">서비스 약관</ion-item>
-    <ion-item tappable (click)="openWeb('2')">개인정보 처리방침</ion-item>
+    <ion-item tappable (click)="sendMail()">문의하기</ion-item>
+    <ion-item tappable (click)="openWeb()">서비스 약관</ion-item>
+    <ion-item tappable (click)="openWeb()">개인정보 처리방침</ion-item>
   </ion-item-group>
   <ion-item-group>
     <ion-item-divider color="light">앱 정보</ion-item-divider>

@@ -1,9 +1,11 @@
 export interface GameVO {
-  id:string;
+  _id:string;
   name:string;
+  type:Array<string>;
+  subscribeCount:number;
   content:string;
+  url:string;
   img:string;
-  regCnt:number;
   color:string;
   isShow:boolean;
 }

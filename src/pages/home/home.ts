@@ -13,7 +13,7 @@ import {COM_CONST} from "../../const/COM_CONST";
 export class HomePage {
 
   games:GameVO[] = [];
-  offset:number = 1;
+  offset:number = 0;
 
   constructor(public navCtrl: NavController
               ,public gamesService: GamesService
@@ -23,11 +23,12 @@ export class HomePage {
       this.games = val;
       if(this.games.length == 0) this.commonUtil.showAlert('안내','준비중입니다..').present();
     });
+
   }
 
   //게임 상세 보기
   showGameDetail(gameId:string){
-    this.gamesService.selectGameInfo(gameId).then(value => {
+    this.gamesService.selectGameForID(gameId).then(value => {
       this.modalCtrl.create(GamePage,{game:value}).present();
     });
   }

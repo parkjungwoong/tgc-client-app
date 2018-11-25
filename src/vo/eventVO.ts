@@ -5,6 +5,10 @@ export interface eventVO {
   titleColor:string;
   rowRange:number;
   isHide:boolean;
-  eventId:string;
-  gameId:string;
+  _id:string;
+  gameInfo:{
+    _id:string,
+    name:string
+  };
+  url:string;
 }

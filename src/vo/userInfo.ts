@@ -1,11 +1,20 @@
 export interface UserInfo {
-  custNo:string;
-  id:string;
+  userNo:string;
   name:string;
   email:string;
-  password:string;
-  joinDt:string;
-  marketing:boolean;
-  pushAgree:boolean;
-  thirdPartyApp:Array<string>;
+  thirdPartyLinkApp:string,
+  thirdPartyLinkInfo:any,
+  pw:string;
+  state:Number;
+  setInfo:{
+    marketing:boolean;
+    pushAgree:boolean;
+  };
+  device:{
+    appVer:string;
+    osType:string;
+    osVer:string;
+  };
+  token:string;
+  inDt:string;
 }

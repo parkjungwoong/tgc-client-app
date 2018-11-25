@@ -1,14 +1,23 @@
 import { Injectable } from '@angular/core';
-import {AlertController, LoadingController} from "ionic-angular";
+import {AlertController, LoadingController, ToastController} from "ionic-angular";
 import {COM_CONST} from "../const/COM_CONST";
 import {SERVER} from "../const/SERVER";
+import {BrowserTab} from "@ionic-native/browser-tab";
+import {EmailComposer} from "@ionic-native/email-composer";
+import {AppVersion} from "@ionic-native/app-version";
+import {Device} from "@ionic-native/device";
 
 @Injectable()
 export class CommonUtils {
 
   constructor(
-    private alertCtrl: AlertController,
-    private loadingCtrl: LoadingController
+    private alertCtrl: AlertController
+    ,private loadingCtrl: LoadingController
+    ,private toastCtrl: ToastController
+    ,private browserTab: BrowserTab
+    ,private emailComposer: EmailComposer
+    ,private appVersion: AppVersion
+    ,private device: Device
   ){
 
   }
@@ -64,7 +73,7 @@ export class CommonUtils {
    * @param {string[]} param 파라미터
    * @returns {string} url
    */
-  margeUrlParam(url:SERVER,param:string[]):string {
+  margeUrlParam(url:string,param:string[]):string {
     let result:string = url;
     param.forEach(val => {
       result = result.replace(COM_CONST.URL_PARAM_MARK,val);
@@ -102,6 +111,49 @@ export class CommonUtils {
     }
 
     return Number(result);
+  }
+
+  showTostMsg(message:string){
+    return this.toastCtrl.create({
+      message: message,
+      duration: 3000,
+      position: 'top'
+    });
+  }
+
+  openTabBrower(url:string){
+    this.browserTab.isAvailable().then(isAvailable => {
+      if (isAvailable) {
+        this.browserTab.openUrl(url);
+      } else {
+        window.open(url, '_system', 'location=yes')
+      }
+    });
+  }
+
+  async sendMail(emailAddr){
+
+    let appVer = await this.appVersion.getVersionNumber();
+    let body = '기종:'+this.device.model+'\n기기OS:'+this.device.platform+'\n기기OS ver:'+this.device.version+'\n앱 ver:'+appVer+'\n증상 :';
+
+    let email = {
+      to: emailAddr,
+      cc: '',
+      bcc: [],
+      attachments: [
+      ],
+      subject: '[게임 퀵마크] 이용 문의',
+      body: body,
+      isHtml: true
+    };
+
+    this.emailComposer.isAvailable().then((available: boolean) =>{
+      if(available) {
+        this.emailComposer.open(email);
+      } else {
+        this.showAlert('','이메일 실행에 실패하였습니다.\n'+emailAddr+'로 보내주세요.').present();
+      }
+    });
   }
 
 

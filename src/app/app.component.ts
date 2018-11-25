@@ -7,6 +7,7 @@ import { HomePage } from '../pages/home/home';
 import {ComService} from "../services/comService";
 import {MyListPage} from "../pages/myList/myList";
 import {CalendarPage} from "../pages/calendar/calendar";
+import {UserService} from "../services/userService";
 
 @Component({
   templateUrl: 'app.html'
@@ -23,6 +24,7 @@ export class MyApp {
               , public statusBar: StatusBar
               , public splashScreen: SplashScreen
               , private comService: ComService
+              , private userService: UserService
   ) {
     this.initializeApp();
 
@@ -40,8 +42,13 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
+      this.comService.checkAppInit();
+      this.userService.checkLoginStatus();
+
       this.splashScreen.hide();
-      this.comService.getFireBaseToken();
+
+      this.comService.subscibeNotiMsg();
+      this.comService.showAdmob();
     });
   }
 

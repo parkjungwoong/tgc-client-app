@@ -12,7 +12,7 @@
       <ion-card-title>
         {{game.name}}
       </ion-card-title>
-      <p>2018-10-20 ~ 2018-10-30</p>
+      <p>{{eventInfo.stDt}} ~ {{eventInfo.enDt}}</p>
       <p>
         <!--todo : 데이터 형태 정해지면 값 다시 세팅 하기-->
         {{eventInfo.title}}
@@ -29,7 +29,7 @@
       </ion-list>
       <ion-row no-padding>
         <ion-col>
-          <button ion-button clear small color="danger" icon-start (click)="openWeb()">
+          <button ion-button clear small color="danger" icon-start (click)="openWeb(eventInfo.url)">
             <ion-icon name='share-alt'></ion-icon>
             {{game.name}} 홈페이지
           </button>

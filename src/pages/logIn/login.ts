@@ -5,6 +5,8 @@ import {UserData} from "../../datas/user-data";
 import {regUserPage} from "../regUser/regUser";
 import {CommonUtils} from "../../common/commonUtils";
 import {NgForm} from "@angular/forms";
+import {Facebook} from "@ionic-native/facebook";
+import {COM_CONST} from "../../const/COM_CONST";
 
 @Component({
   selector: 'page-login',
@@ -12,12 +14,13 @@ import {NgForm} from "@angular/forms";
 })
 export class LoginPage {
 
-  loginInfo:any = {
-    id:'',
+  loginInfo = {
+    userNo:'',
     password: ''
   };
 
   isSubmit = false;
+  appTitle = COM_CONST.APP_TITLE;
 
   constructor(public navCtrl: NavController
               ,public navParams: NavParams
@@ -25,6 +28,7 @@ export class LoginPage {
               ,private userService: UserService
               ,private modalCtrl: ModalController
               ,private commonUtil:CommonUtils
+              ,private fb: Facebook
               ,private userData: UserData) {
 
   }
@@ -36,10 +40,17 @@ export class LoginPage {
     this.isSubmit = true;
     if (form.valid) {
       this.loginProc().then(value => {
-        value ? this.dismiss(value) : this.commonUtil.showAlert('알림','로그인 실패').present();
+        if(value) this.dismiss(value);
       });
     }
   }
+
+  async fbLogin(){
+    await this.userService.loginFaceBook().then(value => {
+      if(value) this.dismiss(value);
+    });
+  }
+
 
   async loginProc(){
     let userInfo = await this.userService.login(this.loginInfo);//로그인 요청

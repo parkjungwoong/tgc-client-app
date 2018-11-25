@@ -5,7 +5,7 @@
     </button>
     <ion-title>내 정보</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="showSetPage()" *ngIf="userInfo.custNo != ''">
+      <button ion-button icon-only (click)="showSetPage()" *ngIf="userInfo.userNo != ''">
         <ion-icon name="md-settings"></ion-icon>
       </button>
     </ion-buttons>
@@ -16,11 +16,9 @@
   <ion-list>
     <ion-item>
       <ion-avatar item-start>
-        <!--todo : 유저 이미지 넣기 & ERR처리-->
-        <img src="../../assets/imgs/user.jpg">
+        <img src="{{userPhoto || '../../assets/imgs/user.jpg'}}" >
       </ion-avatar>
       <h2>{{userInfo.name}}</h2>
-      <p>{{userInfo.email}}</p>
     </ion-item>
   </ion-list>
 
@@ -42,8 +40,8 @@
         <ion-thumbnail item-start>
           <img src="{{item.img}}"/>
         </ion-thumbnail>
-        <h2>{{item.gameName}}</h2>
-        <p>구독일 : {{item.regDt}}</p>
+        <h2>{{item.name}}</h2>
+        <p>구독일 : {{item.inDt}}</p>
       </ion-item>
     </ion-list>
 
@@ -51,7 +49,7 @@
       <ion-item *ngFor="let item of messageList" tappable>
         <h2>{{item.title}}</h2>
         <p>{{item.content}}</p>
-        <small>{{item.sendDt}}</small>
+        <small>{{item.inDt}}</small>
       </ion-item>
     </ion-list>
   </div>

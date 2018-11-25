@@ -4,13 +4,27 @@ import {CommonUtils} from "../common/commonUtils";
 import {GameVO} from "../vo/gameVO";
 import {SERVER} from "../const/SERVER";
 import {UserInfo} from "../vo/userInfo";
+import {LoginPage} from "../pages/logIn/login";
+import {COM_CONST} from "../const/COM_CONST";
+import {UserData} from "../datas/user-data";
+import {Facebook, FacebookLoginResponse} from "@ionic-native/facebook";
+import {ModalController} from "ionic-angular";
+import {Device} from "@ionic-native/device";
+import {AppVersion} from "@ionic-native/app-version";
+import {Firebase} from "@ionic-native/firebase";
 
 @Injectable()
 export class UserService {
 
   constructor(
-    private apiCall:ApiCall,
-    private commonUtil:CommonUtils
+    private apiCall:ApiCall
+    ,private commonUtil:CommonUtils
+    ,private userData:UserData
+    ,private fb: Facebook
+    ,private modalCtrl: ModalController
+    ,private device: Device
+    ,private appVersion: AppVersion
+    ,private firebase: Firebase
   ){}
 
 
@@ -19,10 +33,8 @@ export class UserService {
    * @param userInfo
    * @returns {Promise<any>}
    */
-  login(userInfo:{id,password}): Promise<UserInfo> {
-    return this.apiCall.post( SERVER.LOGIN
-      ,{ userInfo }
-      ,true).then(value => {
+  login(userInfo:any): Promise<UserInfo> {
+    return this.apiCall.post( SERVER.LOGIN, userInfo,true).then(value => {
       return value;
     }).catch( err => {
       return false;
@@ -36,7 +48,7 @@ export class UserService {
    */
   regUser(userInfo:any): Promise<any> {
     return this.apiCall.post( SERVER.USER_ADD
-      ,{ userInfo }
+      , userInfo
       ,true).then(value => {
       return value;
     }).catch( err => {
@@ -49,12 +61,12 @@ export class UserService {
    * @param userInfo 회원 정보
    * @returns {Promise<GameVO[]>}
    */
-  updateInfo(userInfo:any): Promise<any> {
-    let url = this.commonUtil.margeUrlParam(SERVER.USER_UPDATE,[userInfo.id]);
+  updateInfo(userInfo:UserInfo, isLoading:boolean): Promise<any> {
+    let url = this.commonUtil.margeUrlParam(SERVER.USER_UPDATE,[userInfo.userNo]);
 
     return this.apiCall.put( url
-      ,{ "device_token" : userInfo.device_token }
-      ,false).then(value => {
+      ,userInfo
+      ,isLoading).then(value => {
       return value;
     }).catch( err => {
       return null;
@@ -69,7 +81,7 @@ export class UserService {
    */
   getMessageList(userNo:string,offset:number): Promise<any> {
     let url = this.commonUtil.margeUrlParam(SERVER.GET_MESSAGE_LIST,[userNo]);
-    url += this.commonUtil.getPagingQuery(offset,'');
+    url += this.commonUtil.getPagingQuery(offset,'10');
 
     return this.apiCall.get( url,true).then(value => {
       return value;
@@ -80,15 +92,113 @@ export class UserService {
 
   /**
    * 탈퇴
-   * @param {string} custNo 회원 번호
+   * @param {string} userNo 회원 번호
    * @returns {Promise<any>}
    */
-  deleteUser(custNo:string): Promise<any> {
-    return this.apiCall.delete( SERVER.USER_DEL,{ custNo: custNo},true).then(value => {
+  deleteUser(userNo:string): Promise<any> {
+    return this.apiCall.delete( SERVER.USER_DEL,{ userNo: userNo},true).then(value => {
       return value;
     }).catch( err => {
       return false;
     });
   }
 
+  /**
+   * 외부 연동 로그인
+   * @param userInfo
+   * @returns {Promise<any>}
+   */
+  thirdPartyLogin(userInfo:UserInfo): Promise<any> {
+    return this.apiCall.post( SERVER.THIRD_PARTY_LOGIN
+      , userInfo
+      ,true).then(value => {
+      return value;
+    }).catch( err => {
+      return false;
+    });
+  }
+
+  //todo : 리펙토링 대상
+  /**
+   * 앱실행시 로그인 상태 체크
+   * @returns {Promise<any>}
+   */
+  async checkLoginStatus():Promise<any>{
+    let userInfo = await this.userData.checkAndGetUserInfo();
+
+    if(!this.commonUtil.isEmpty(userInfo)){
+      //소셜 로그인 만료 체크
+      let type = userInfo.thirdPartyLinkApp;
+
+      if(type == COM_CONST.FACEBOOK){
+        let fbRes = await this.fb.getLoginStatus();
+
+        if(fbRes.status != 'connected'){
+          this.userData.logout();
+          this.commonUtil.showAlert('로그인 만료','다시 로그인 해주세요.').present();
+          this.modalCtrl.create(LoginPage).present();
+        } else {
+          console.log('fbRes',JSON.stringify(fbRes,null,2));
+          let udateUserInfo:UserInfo = {} as any;
+
+          udateUserInfo.userNo = userInfo.userNo;
+
+          udateUserInfo.device = {} as any;
+          udateUserInfo.device.osType = this.device.platform;
+          udateUserInfo.device.osVer = this.device.version;
+          udateUserInfo.device.appVer = await this.appVersion.getVersionNumber();
+
+          udateUserInfo.token = await this.firebase.getToken();
+
+          await this.updateInfo(udateUserInfo,false);
+        }
+      }
+    }
+  }
+
+  /**
+   * 페이스북 로그인
+   * @returns {Promise<UserInfo>}
+   */
+  async loginFaceBook(): Promise<UserInfo> {
+    let userInfo:UserInfo = {} as any;
+    userInfo.thirdPartyLinkApp = COM_CONST.FACEBOOK;
+
+    let fbRes = await this.fb.getLoginStatus();
+    console.log('getLoginStatus',JSON.stringify(fbRes));
+
+    if(fbRes.status != 'connected'){
+      console.log('first FB');
+      let fbLoginRes: FacebookLoginResponse = await this.fb.login(['public_profile', 'email']).catch( e => {
+        console.log('fail facebook login', JSON.stringify(e));
+        this.commonUtil.showAlert('','페이스북 연동에 실패하였습니다.').present();
+        return null;
+      });
+      userInfo.thirdPartyLinkInfo = fbLoginRes;
+    } else {
+      console.log('already FB');
+      userInfo.thirdPartyLinkInfo = fbRes;
+    }
+
+    let fbUserInfo = await this.fb.api('/me',["public_profile"]);
+    console.log('api FB', JSON.stringify(fbUserInfo));
+    userInfo.name = fbUserInfo.name;
+    userInfo.setInfo = {
+      marketing:true
+      ,pushAgree:true
+    };
+    userInfo.token = await this.firebase.getToken();
+
+    let finalUserInfo = await this.thirdPartyLogin(userInfo).catch(e=>{
+      console.error('회원가입 에러',JSON.stringify(e));
+      return null;
+    });
+
+    if(finalUserInfo){
+      this.userData.insertLoginInfo(finalUserInfo)
+    } else {
+      return null;
+    }
+    return finalUserInfo;
+  }
 }

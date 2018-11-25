@@ -25,6 +25,12 @@ import {CalendarPage} from "../pages/calendar/calendar";
 import {GamePage} from "../pages/game/game";
 import {SetPage} from "../pages/set/set";
 import {EventPage} from "../pages/event/event";
+import {Facebook} from "@ionic-native/facebook";
+import {AppVersion} from "@ionic-native/app-version";
+import {Device} from "@ionic-native/device";
+import {BrowserTab} from "@ionic-native/browser-tab";
+import {EmailComposer} from "@ionic-native/email-composer";
+//import { AdMob } from "ionic-admob";
 
 @NgModule({
   declarations: [
@@ -68,7 +74,13 @@ import {EventPage} from "../pages/event/event";
     ApiCall,
     CommonUtils,
     LocalDataUtils,
-    Firebase
+    Firebase,
+    Facebook,
+    AppVersion,
+    Device,
+    BrowserTab,
+    EmailComposer,
+    //AdMob
   ]
 })
 export class AppModule {}

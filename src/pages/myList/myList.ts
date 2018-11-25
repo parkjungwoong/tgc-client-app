@@ -8,6 +8,7 @@ import {UserInfo} from "../../vo/userInfo";
 import {UserService} from "../../services/userService";
 import {COM_CONST} from "../../const/COM_CONST";
 import {SetPage} from "../set/set";
+import {GameVO} from "../../vo/gameVO";
 
 @Component({
   selector: 'page-myList',
@@ -15,21 +16,12 @@ import {SetPage} from "../set/set";
 })
 export class MyListPage {
 
-  userInfo:UserInfo = {
-    custNo:''
-    ,id:''
-    ,name:'로그인이 필요합니다.'
-    ,email:''
-    ,password:''
-    ,joinDt:''
-    ,marketing:false
-    ,pushAgree:false
-    ,thirdPartyApp:[]
-  };
+  userInfo:UserInfo = {} as any;
 
-  subscribeList:Array<any>;
+  subscribeList:Array<GameVO>;
   messageList:Array<any>;
   segmentType:number;
+  userPhoto:string;
 
   constructor(public navCtrl: NavController
               ,public alertCtrl: AlertController
@@ -60,8 +52,15 @@ export class MyListPage {
 
     if(userInfo != null) {
       this.userInfo = userInfo;
-      this.subscribeList = await this.gamesService.getMyList(this.userInfo.custNo,1);
-      this.messageList = await this.userService.getMessageList(this.userInfo.custNo,1);
+      this.subscribeList = await this.gamesService.getMyList(this.userInfo.userNo,0);
+      this.messageList = await this.userService.getMessageList(this.userInfo.userNo,0);
+      //todo: 리펙토링 대상
+      console.log('userInfo',JSON.stringify(this.userInfo));
+      if(this.userInfo.thirdPartyLinkApp == COM_CONST.FACEBOOK){
+        let fbUserID = this.userInfo.userNo.substring(1,this.userInfo.userNo.length);
+        this.userPhoto = this.commonUtil.margeUrlParam(COM_CONST.FACEBOOK_PHOTO_LINK,[fbUserID]);
+        console.log('phto',this.userPhoto);
+      }
 
     } else {
       this.modalCtrl.create(LoginPage).present();
@@ -69,7 +68,7 @@ export class MyListPage {
   }
 
   //구독 취소하기
-  delMySubscribe(gameInfo:any){
+  delMySubscribe(gameInfo:GameVO){
 
     const confirm = this.alertCtrl.create({
       title: '구독 취소',
@@ -83,9 +82,9 @@ export class MyListPage {
         {
           text: '구독 취소',
           handler: () => {
-            this.gamesService.delSubscribe(this.userInfo.custNo, gameInfo.id).then(val => {
+            this.gamesService.delSubscribe(this.userInfo.userNo, gameInfo._id).then(val => {
               if(val){
-                this.commonUtil.showAlert('구독 취소','굿 바이 '+gameInfo.gameNm).present();
+                this.commonUtil.showAlert('구독 취소','굿 바이 '+gameInfo.name).present();
                 this.subscribeList.splice(this.subscribeList.indexOf(gameInfo),1);
               }
             });

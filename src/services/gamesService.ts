@@ -17,11 +17,12 @@ export class GamesService {
    * @param {string} gameId
    * @returns {Promise<any>}
    */
-  selectGameInfo(gameId:string): Promise<any> {
-    let url = this.commonUtil.margeUrlParam(SERVER.SEARCH_GAME,['gameId='+gameId]);
+  selectGameForID(gameId:string): Promise<any> {
+    let url = this.commonUtil.margeUrlParam(SERVER.SEARCH_GAME,[encodeURIComponent('id='+gameId)]);
 
     return this.apiCall.get( url,true).then(value => {
-      return value;
+      //todo: 현재는 ID로만 검색해서 0번 인덱스만 반환
+      return value[0];
     }).catch( err => {
       return false;
     });
@@ -50,7 +51,7 @@ export class GamesService {
    */
   getMyList(userNo:string,offset:number): Promise<any> {
     let url = this.commonUtil.margeUrlParam(SERVER.GET_MY_SUBSCRIBE,[userNo]);
-    url += this.commonUtil.getPagingQuery(offset,'');
+    //url += this.commonUtil.getPagingQuery(offset,'10');
 
     return this.apiCall.get( url,true).then(value => {
       return value;
@@ -76,9 +77,9 @@ export class GamesService {
   /**
    * 구독 중인 게임 이벤트 조회
    */
-  getMyEvent(userId:string,offset:number):Promise<eventVO[]> {
+  getMyEvent(userId:string):Promise<eventVO[]> {
     let url = this.commonUtil.margeUrlParam(SERVER.GET_MY_EVENT,[userId]);
-    url += this.commonUtil.getPagingQuery(offset,'');
+    url += '?iso='+encodeURIComponent(new Date().toISOString());
 
     return this.apiCall.get( url,true).then(value => {
       return value;
@@ -90,11 +91,12 @@ export class GamesService {
   /**
    * 구독
    * @param {string} gameId 게임 아이디
+   * @param {string} gameName 게임 이름
    * @param {string} userNo 회원 고유 번호
    * @returns {Promise<boolean>} 성공 여부
    */
-  subscribe(gameId:string,userNo:string): Promise<boolean> {
-    return this.apiCall.post( SERVER.ADD_SUBSCRIBE,{ "gameId" : gameId,"userNo" : userNo },true).then(value => {
+  subscribe(gameId:string,gameName:string,userNo:string): Promise<boolean> {
+    return this.apiCall.post( SERVER.ADD_SUBSCRIBE,{ "_id" : gameId,"userNo" : userNo },true).then(value => {
         return true;
       }).catch( err => {
         return false;
@@ -108,7 +110,8 @@ export class GamesService {
    * @returns {Promise<boolean>} 성공 여부
    */
   delSubscribe(userNo:string,gameId:string): Promise<boolean> {
-    return this.apiCall.post( SERVER.DEL_SUBSCRIBE,{ "gameId" : gameId,"userNo" : userNo },true).then(value => {
+    let url = this.commonUtil.margeUrlParam(SERVER.DEL_SUBSCRIBE,[userNo,gameId]);
+    return this.apiCall.delete( url,{ },true).then(value => {
         return true;
       }).catch( err => {
         return false;

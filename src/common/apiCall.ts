@@ -90,9 +90,8 @@ export class ApiCall {
    */
   private errProce(err:any) {
     console.error('===========RESPONSE ERR============',JSON.stringify(err,null,2));
-    let errMsg;
-    err[COM_CONST.COMMON_RES_MSG] ? errMsg = err[COM_CONST.COMMON_RES_MSG] : errMsg = COM_CONST.FAIL_MSG;
-
-    this.commonUtils.showAlert('', errMsg).present();
+    let errCode = err[COM_CONST.COMMON_RES_CODE];
+    let errMsg = err[COM_CONST.COMMON_RES_MSG] ? err[COM_CONST.COMMON_RES_MSG] : COM_CONST.FAIL_MSG;
+    this.commonUtils.showAlert('Code : '+errCode, errMsg).present();
   }
 }

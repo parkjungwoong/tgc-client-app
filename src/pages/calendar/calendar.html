@@ -12,7 +12,7 @@
     <ion-card-content>
       <div class="subscribe-list">
         <ion-col (click)="toggleEventHide('all')">전체</ion-col>
-        <ion-col *ngFor="let item of subscribeList" class="{{item.color}}" (click)="toggleEventHide(item.id)">{{item.name}}</ion-col>
+        <ion-col *ngFor="let item of subscribeList" class="{{item.color}}" (click)="toggleEventHide(item._id)">{{item.name}}</ion-col>
       </div>
     </ion-card-content>
   </ion-card>

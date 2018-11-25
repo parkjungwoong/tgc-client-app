@@ -10,15 +10,15 @@
   <div padding text-center>
     <div class="logo"></div>
     <h2 ion-text class="text-primary">
-      <strong>TGC(가칭)</strong>
+      <strong>{{appTitle}}</strong>
     </h2>
   </div>
 
   <ion-card>
     <ion-card-content>
       <form #loginForm="ngForm" novalidate>
-        <ion-input [(ngModel)]="loginInfo.id" name="id" type="text" #id="ngModel" placeholder="이메일" required></ion-input>
-        <p ion-text [hidden]="loginInfo.id || !isSubmit" color="danger" padding-left>
+        <ion-input [(ngModel)]="loginInfo.userNo" name="userNo" type="text" #userNo="ngModel" placeholder="이메일" required></ion-input>
+        <p ion-text [hidden]="loginInfo.userNo || !isSubmit" color="danger" padding-left>
           아이디를 입력해주세요.
         </p>
         <hr>
@@ -34,7 +34,7 @@
   <ion-grid>
     <ion-row>
       <ion-col col-4>
-        <button ion-button icon-only block class="btn-facebook">
+        <button ion-button icon-only block class="btn-facebook" (click)="fbLogin()">
           <ion-icon name="logo-facebook"></ion-icon>
         </button>
       </ion-col>
