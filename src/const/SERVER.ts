@@ -1,7 +1,7 @@
 export const enum SERVER {
   // SERVER_URL = 'http://localhost:80/'
-  // SERVER_URL = 'http://35.187.221.208/'
-  SERVER_URL = 'https://tgcapi.bmdevs.xyz/'
+  SERVER_URL = 'http://35.187.221.208/'
+  // SERVER_URL = 'https://tgcapi.bmdevs.xyz/'
 
   ,CHECK_INIT = 'com/checkInit/#' //앱 실행 데이터 확인
 

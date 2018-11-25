@@ -5,7 +5,6 @@ import {UserData} from "../../datas/user-data";
 import {regUserPage} from "../regUser/regUser";
 import {CommonUtils} from "../../common/commonUtils";
 import {NgForm} from "@angular/forms";
-import {Facebook} from "@ionic-native/facebook";
 import {COM_CONST} from "../../const/COM_CONST";
 
 @Component({
@@ -28,7 +27,6 @@ export class LoginPage {
               ,private userService: UserService
               ,private modalCtrl: ModalController
               ,private commonUtil:CommonUtils
-              ,private fb: Facebook
               ,private userData: UserData) {
 
   }
