@@ -37,19 +37,18 @@ export class MyApp {
 
   }
 
-  initializeApp() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.comService.checkAppInit();
-      this.userService.checkLoginStatus();
-
-      this.splashScreen.hide();
-
-      this.comService.subscibeNotiMsg();
-      this.comService.showAdmob();
+  async initializeApp() {
+    await this.platform.ready();
+    this.statusBar.styleBlackOpaque();
+    this.splashScreen.hide();
+    await this.comService.checkAppInit().catch(e=>{
+      console.error('checkAppInit',e);
     });
+    await this.userService.checkLoginStatus().catch(e=>{
+      console.error('checkLoginStatus',e);
+    });
+    this.comService.subscibeNotiMsg();
+
   }
 
   openPage(page) {

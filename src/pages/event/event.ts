@@ -3,8 +3,6 @@ import {ModalController, NavController, NavParams, ViewController} from 'ionic-a
 import {GamesService} from "../../services/gamesService";
 import {CommonUtils} from "../../common/commonUtils";
 import {UserData} from "../../datas/user-data";
-import {LoginPage} from "../logIn/login";
-import {BrowserTab} from "@ionic-native/browser-tab";
 import {eventVO} from "../../vo/eventVO";
 
 @Component({
@@ -23,7 +21,6 @@ export class EventPage {
               ,private gamesService: GamesService
               ,private commonUtil : CommonUtils
               ,private userData:UserData
-              ,private browserTab: BrowserTab
               ,params: NavParams) {
     //부모 창으로 부터  정보 받아서 뷰에 표기
     this.game = params.get('game');

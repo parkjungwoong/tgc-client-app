@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="2" id="com.bmdevs.tgc" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="4" id="com.bmdevs.tgc" version="1.0.2" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>게임 퀵마크</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="myuoong@gmail.com" href="https://parkjungwoong.github.io/">ParkJungWoong</author>
@@ -95,6 +95,10 @@
         <variable name="APP_ID" value="579397959146660" />
         <variable name="APP_NAME" value="게임 퀵마크" />
         <variable name="FACEBOOK_ANDROID_SDK_VERSION" value="4.38.1" />
+    </plugin>
+    <plugin name="cordova-admob-plus" spec="0.16.0">
+        <variable name="APP_ID_ANDROID" value="ca-app-pub-9880856608011876~4614337203" />
+        <variable name="PLAY_SERVICES_VERSION" value="16.0.0" />
     </plugin>
     <engine name="android" spec="7.1.4" />
 </widget>

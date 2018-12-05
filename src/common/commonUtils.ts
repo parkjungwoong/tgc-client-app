@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import {AlertController, LoadingController, ToastController} from "ionic-angular";
-import {COM_CONST} from "../const/COM_CONST";
-import {SERVER} from "../const/SERVER";
-import {BrowserTab} from "@ionic-native/browser-tab";
+import {TConst} from "../const/TConst";
 import {EmailComposer} from "@ionic-native/email-composer";
 import {AppVersion} from "@ionic-native/app-version";
 import {Device} from "@ionic-native/device";
@@ -14,7 +12,6 @@ export class CommonUtils {
     private alertCtrl: AlertController
     ,private loadingCtrl: LoadingController
     ,private toastCtrl: ToastController
-    ,private browserTab: BrowserTab
     ,private emailComposer: EmailComposer
     ,private appVersion: AppVersion
     ,private device: Device
@@ -30,12 +27,29 @@ export class CommonUtils {
    */
   showAlert(title:string,message:string) {
 
-    if(title == '') title = COM_CONST.ALERT_TITLE;
+    if(title == '') title = TConst.CONST.ALERT_TITLE;
 
     return this.alertCtrl.create({
       title: title,
       subTitle: message,
       buttons: ['확인']
+    });
+  }
+
+  showAlertPromise(meg): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+
+      let alert = this.alertCtrl.create({
+        message: meg,
+        buttons: [{
+          text: '확인',
+          handler: () => {
+            alert.dismiss().then(() => { resolve(true); });
+            return false;
+          }
+        }]
+      });
+      alert.present();
     });
   }
 
@@ -46,7 +60,7 @@ export class CommonUtils {
    */
   showLoading(loadingMessage:string) {
 
-    if(loadingMessage == '') loadingMessage = COM_CONST.LOADING_DEFAULT_MESSAGE;
+    if(loadingMessage == '') loadingMessage = TConst.CONST.LOADING_DEFAULT_MESSAGE;
 
     return this.loadingCtrl.create({
       content: loadingMessage
@@ -76,7 +90,7 @@ export class CommonUtils {
   margeUrlParam(url:string,param:string[]):string {
     let result:string = url;
     param.forEach(val => {
-      result = result.replace(COM_CONST.URL_PARAM_MARK,val);
+      result = result.replace(TConst.CONST.URL_PARAM_MARK,val);
     });
 
     return result;
@@ -89,7 +103,7 @@ export class CommonUtils {
    * @returns {string} 페이징 쿼리스트링
    */
   getPagingQuery(offset:number,limit:string):string{
-    if(this.isEmpty(limit)) limit = COM_CONST.LIMIT+'';
+    if(this.isEmpty(limit)) limit = TConst.CONST.LIMIT+'';
     return '?offset='+offset+'&limit='+limit;
   }
 
@@ -122,13 +136,8 @@ export class CommonUtils {
   }
 
   openTabBrower(url:string){
-    this.browserTab.isAvailable().then(isAvailable => {
-      if (isAvailable) {
-        this.browserTab.openUrl(url);
-      } else {
-        window.open(url, '_system', 'location=yes')
-      }
-    });
+    //todo: 브라우저 탭으로 변경하기 - 코드로바7지원하는거 나오
+    window.open(url, '_system', 'location=yes');
   }
 
   async sendMail(emailAddr){

@@ -4,8 +4,7 @@ import { UserData } from "../datas/user-data";
 import {AlertController, LoadingController} from 'ionic-angular';
 import 'rxjs/add/operator/toPromise';
 import {CommonUtils} from "./commonUtils";
-import {SERVER} from "../const/SERVER";
-import {COM_CONST} from "../const/COM_CONST";
+import {TConst} from "../const/TConst";
 
 /**
  * API 서버 호출 공통 유틸
@@ -20,22 +19,22 @@ export class ApiCall {
   ){}
 
   get(url:string, isLoading:boolean): Promise<any>{
-    let req = new HttpRequest( "GET", SERVER.SERVER_URL+url,{reportProgress: false} );
+    let req = new HttpRequest( "GET", TConst.SERVER.SERVER_URL+url,{reportProgress: false} );
     return this.request(req, isLoading);
   }
 
   post(url:string, params:any, isLoading:boolean):Promise<any>{
-    let req = new HttpRequest("POST", SERVER.SERVER_URL+url, params, {reportProgress: false} );
+    let req = new HttpRequest("POST", TConst.SERVER.SERVER_URL+url, params, {reportProgress: false} );
     return this.request(req, isLoading);
   }
 
   put(url:string, params:any, isLoading:boolean):Promise<any>{
-    let req = new HttpRequest("PUT", SERVER.SERVER_URL+url, params, {reportProgress: false} );
+    let req = new HttpRequest("PUT", TConst.SERVER.SERVER_URL+url, params, {reportProgress: false} );
     return this.request(req, isLoading);
   }
 
   delete(url:string, params:any, isLoading:boolean):Promise<any>{
-    let req = new HttpRequest("DELETE", SERVER.SERVER_URL+url, params, {reportProgress: false} );
+    let req = new HttpRequest("DELETE", TConst.SERVER.SERVER_URL+url, params, {reportProgress: false} );
     return this.request(req, isLoading);
   }
 
@@ -71,8 +70,8 @@ export class ApiCall {
    */
   private isResOKCode(res:any):boolean {
     console.debug('===========RESPONSE============',JSON.stringify(res,null,2));
-    let resCode = res[COM_CONST.COMMON_RES_CODE];
-    return resCode == COM_CONST.OK_CODE;
+    let resCode = res[TConst.CONST.COMMON_RES_CODE];
+    return resCode == TConst.CONST.OK_CODE;
   }
 
   /**
@@ -81,7 +80,7 @@ export class ApiCall {
    * @returns {any} result값
    */
   private getResult(res:any):any {
-    return res[COM_CONST.COMMON_RES_RESULT];
+    return res[TConst.CONST.COMMON_RES_RESULT];
   }
 
   /**
@@ -90,8 +89,8 @@ export class ApiCall {
    */
   private errProce(err:any) {
     console.error('===========RESPONSE ERR============',JSON.stringify(err,null,2));
-    let errCode = err[COM_CONST.COMMON_RES_CODE];
-    let errMsg = err[COM_CONST.COMMON_RES_MSG] ? err[COM_CONST.COMMON_RES_MSG] : COM_CONST.FAIL_MSG;
+    let errCode = err[TConst.CONST.COMMON_RES_CODE];
+    let errMsg = err[TConst.CONST.COMMON_RES_MSG] ? err[TConst.CONST.COMMON_RES_MSG] : TConst.CONST.FAIL_MSG;
     this.commonUtils.showAlert('Code : '+errCode, errMsg).present();
   }
 }

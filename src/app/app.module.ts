@@ -28,9 +28,9 @@ import {EventPage} from "../pages/event/event";
 import {Facebook} from "@ionic-native/facebook";
 import {AppVersion} from "@ionic-native/app-version";
 import {Device} from "@ionic-native/device";
-import {BrowserTab} from "@ionic-native/browser-tab";
 import {EmailComposer} from "@ionic-native/email-composer";
-//import { AdMob } from "ionic-admob";
+import {AdMob} from "ionic-admob";
+import {BannerPage} from "../pages/banner/banner";
 
 @NgModule({
   declarations: [
@@ -42,7 +42,8 @@ import {EmailComposer} from "@ionic-native/email-composer";
     regUserPage,
     CalendarPage,
     GamePage,
-    EventPage
+    EventPage,
+    BannerPage
   ],
   imports: [
     BrowserModule,
@@ -60,7 +61,8 @@ import {EmailComposer} from "@ionic-native/email-composer";
     regUserPage,
     CalendarPage,
     GamePage,
-    EventPage
+    EventPage,
+    BannerPage
   ],
   providers: [
     StatusBar,
@@ -78,9 +80,8 @@ import {EmailComposer} from "@ionic-native/email-composer";
     Facebook,
     AppVersion,
     Device,
-    BrowserTab,
     EmailComposer,
-    //AdMob
+    AdMob
   ]
 })
 export class AppModule {}

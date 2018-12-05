@@ -2,10 +2,9 @@ import {Injectable} from "@angular/core";
 import {ApiCall} from "../common/apiCall";
 import {CommonUtils} from "../common/commonUtils";
 import {GameVO} from "../vo/gameVO";
-import {SERVER} from "../const/SERVER";
+import {TConst} from "../const/TConst";
 import {UserInfo} from "../vo/userInfo";
 import {LoginPage} from "../pages/logIn/login";
-import {COM_CONST} from "../const/COM_CONST";
 import {UserData} from "../datas/user-data";
 import {Facebook, FacebookLoginResponse} from "@ionic-native/facebook";
 import {ModalController} from "ionic-angular";
@@ -34,7 +33,7 @@ export class UserService {
    * @returns {Promise<any>}
    */
   login(userInfo:any): Promise<UserInfo> {
-    return this.apiCall.post( SERVER.LOGIN, userInfo,true).then(value => {
+    return this.apiCall.post( TConst.SERVER.LOGIN, userInfo,true).then(value => {
       return value;
     }).catch( err => {
       return false;
@@ -47,7 +46,7 @@ export class UserService {
    * @returns {Promise<any>}
    */
   regUser(userInfo:any): Promise<any> {
-    return this.apiCall.post( SERVER.USER_ADD
+    return this.apiCall.post( TConst.SERVER.USER_ADD
       , userInfo
       ,true).then(value => {
       return value;
@@ -62,7 +61,7 @@ export class UserService {
    * @returns {Promise<GameVO[]>}
    */
   updateInfo(userInfo:UserInfo, isLoading:boolean): Promise<any> {
-    let url = this.commonUtil.margeUrlParam(SERVER.USER_UPDATE,[userInfo.userNo]);
+    let url = this.commonUtil.margeUrlParam(TConst.SERVER.USER_UPDATE,[userInfo.userNo]);
 
     return this.apiCall.put( url
       ,userInfo
@@ -80,7 +79,7 @@ export class UserService {
    * @returns {Promise<any>} 메시지 정보
    */
   getMessageList(userNo:string,offset:number): Promise<any> {
-    let url = this.commonUtil.margeUrlParam(SERVER.GET_MESSAGE_LIST,[userNo]);
+    let url = this.commonUtil.margeUrlParam(TConst.SERVER.GET_MESSAGE_LIST,[userNo]);
     url += this.commonUtil.getPagingQuery(offset,'10');
 
     return this.apiCall.get( url,true).then(value => {
@@ -96,7 +95,7 @@ export class UserService {
    * @returns {Promise<any>}
    */
   deleteUser(userNo:string): Promise<any> {
-    return this.apiCall.delete( SERVER.USER_DEL,{ userNo: userNo},true).then(value => {
+    return this.apiCall.delete( TConst.SERVER.USER_DEL,{ userNo: userNo},true).then(value => {
       return value;
     }).catch( err => {
       return false;
@@ -109,7 +108,7 @@ export class UserService {
    * @returns {Promise<any>}
    */
   thirdPartyLogin(userInfo:UserInfo): Promise<any> {
-    return this.apiCall.post( SERVER.THIRD_PARTY_LOGIN
+    return this.apiCall.post( TConst.SERVER.THIRD_PARTY_LOGIN
       , userInfo
       ,true).then(value => {
       return value;
@@ -130,7 +129,7 @@ export class UserService {
       //소셜 로그인 만료 체크
       let type = userInfo.thirdPartyLinkApp;
 
-      if(type == COM_CONST.FACEBOOK){
+      if(type == TConst.CONST.FACEBOOK){
         let fbRes = await this.fb.getLoginStatus();
 
         if(fbRes.status != 'connected'){
@@ -162,7 +161,7 @@ export class UserService {
    */
   async loginFaceBook(): Promise<UserInfo> {
     let userInfo:UserInfo = {} as any;
-    userInfo.thirdPartyLinkApp = COM_CONST.FACEBOOK;
+    userInfo.thirdPartyLinkApp = TConst.CONST.FACEBOOK;
 
     let fbRes = await this.fb.getLoginStatus();
     console.log('getLoginStatus',JSON.stringify(fbRes));

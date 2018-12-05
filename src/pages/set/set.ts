@@ -4,8 +4,8 @@ import {UserInfo} from "../../vo/userInfo";
 import {UserData} from "../../datas/user-data";
 import {UserService} from "../../services/userService";
 import {CommonUtils} from "../../common/commonUtils";
-import {COM_CONST} from "../../const/COM_CONST";
-import {SERVER} from "../../const/SERVER";
+import {TConst} from "../../const/TConst";
+import {AppVersion} from "@ionic-native/app-version";
 
 @Component({
   selector: 'page-set',
@@ -14,7 +14,7 @@ import {SERVER} from "../../const/SERVER";
 export class SetPage {
 
   userInfo:UserInfo;
-
+  appVer:string;
   constructor(public navCtrl: NavController
               ,public navParams: NavParams
               ,private userData: UserData
@@ -22,20 +22,24 @@ export class SetPage {
               ,public viewCtrl: ViewController
               ,private commonUtil:CommonUtils
               ,public alertCtrl: AlertController
+              ,private appVersion: AppVersion
               ,params: NavParams) {
     this.userInfo = params.get('userInfo');
     this.userInfo.setInfo.pushAgree = !this.commonUtil.isEmpty(this.userInfo.setInfo.pushAgree);
     this.userInfo.setInfo.marketing = !this.commonUtil.isEmpty(this.userInfo.setInfo.marketing);
+    this.appVersion.getVersionNumber().then( ver => {
+      this.appVer = ver;
+    });
   }
 
   //약관 페지이 보여줌
   openWeb(){
-    this.commonUtil.openTabBrower(SERVER.SERVER_URL+SERVER.SERVICE_RULE_LINK);
+    this.commonUtil.openTabBrower(TConst.SERVER.SERVER_URL+TConst.SERVER.SERVICE_RULE_LINK);
   }
 
   //메일 문의
   sendMail(){
-    this.commonUtil.sendMail(COM_CONST.GROUP_MAIL).then();
+    this.commonUtil.sendMail(TConst.CONST.GROUP_MAIL).then();
   }
 
   //권한 설정
@@ -56,9 +60,9 @@ export class SetPage {
 
   //로그 아웃
   logout(){
-    this.userData.logout();
-    this.commonUtil.showAlert('알림','로그아웃 되었습니다.');
-    //todo: 페이지 이동 처리
+    this.userData.logout().then(value => {
+      this.commonUtil.showAlert('알림','로그아웃 되었습니다.').present();
+    });
   }
 
   //탈퇴
@@ -78,8 +82,9 @@ export class SetPage {
             this.logout();
             this.userService.deleteUser(this.userInfo.userNo).then(val => {
               if(val) {
-                this.commonUtil.showAlert('회원 탈퇴','그동안 이용해 주셔서 감사합니다.').present();
-                //todo: 로그아웃 후 페이지 이동 처리
+                this.userData.logout().then(value => {
+                  this.commonUtil.showAlert('회원 탈퇴','그동안 이용해 주셔서 감사합니다.').present();
+                });
               }
             });
           }

@@ -6,7 +6,7 @@ import {UserData} from "../../datas/user-data";
 import {LoginPage} from "../logIn/login";
 import {UserInfo} from "../../vo/userInfo";
 import {UserService} from "../../services/userService";
-import {COM_CONST} from "../../const/COM_CONST";
+import {TConst} from "../../const/TConst";
 import {SetPage} from "../set/set";
 import {GameVO} from "../../vo/gameVO";
 
@@ -31,8 +31,9 @@ export class MyListPage {
               ,private modalCtrl: ModalController
               ,private userData:UserData
               ,private events: Events) {
-
-    this.segmentType = COM_CONST.SEGMENT_TYPE_SUBSCRIBE;
+    this.subscribeList = [];
+    this.messageList = [];
+    this.segmentType = TConst.CONST.SEGMENT_TYPE_SUBSCRIBE;
 
     this.initMyList();
 
@@ -55,11 +56,10 @@ export class MyListPage {
       this.subscribeList = await this.gamesService.getMyList(this.userInfo.userNo,0);
       this.messageList = await this.userService.getMessageList(this.userInfo.userNo,0);
       //todo: 리펙토링 대상
-      console.log('userInfo',JSON.stringify(this.userInfo));
-      if(this.userInfo.thirdPartyLinkApp == COM_CONST.FACEBOOK){
+
+      if(this.userInfo.thirdPartyLinkApp == TConst.CONST.FACEBOOK){
         let fbUserID = this.userInfo.userNo.substring(1,this.userInfo.userNo.length);
-        this.userPhoto = this.commonUtil.margeUrlParam(COM_CONST.FACEBOOK_PHOTO_LINK,[fbUserID]);
-        console.log('phto',this.userPhoto);
+        this.userPhoto = this.commonUtil.margeUrlParam(TConst.CONST.FACEBOOK_PHOTO_LINK,[fbUserID]);
       }
 
     } else {

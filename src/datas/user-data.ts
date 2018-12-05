@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 
-import {Events, ModalController} from 'ionic-angular';
+import {Events} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { UserInfo } from '../vo/userInfo'
-import {LoginPage} from "../pages/logIn/login";
 
 @Injectable()
 export class UserData {
@@ -28,10 +27,11 @@ export class UserData {
   };
 
   //로그아웃
-  logout(): void {
-    this.storage.remove(this.HAS_LOGGED_IN);
-    this.storage.remove(this.USER_INFO);
+  async logout() {
+    await this.storage.remove(this.HAS_LOGGED_IN);
+    await this.storage.remove(this.USER_INFO);
     this.events.publish('user:logout');
+    return true;
   };
 
   //로그인 체크

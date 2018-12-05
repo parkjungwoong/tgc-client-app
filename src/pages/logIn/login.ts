@@ -5,7 +5,7 @@ import {UserData} from "../../datas/user-data";
 import {regUserPage} from "../regUser/regUser";
 import {CommonUtils} from "../../common/commonUtils";
 import {NgForm} from "@angular/forms";
-import {COM_CONST} from "../../const/COM_CONST";
+import {TConst} from "../../const/TConst";
 
 @Component({
   selector: 'page-login',
@@ -19,7 +19,7 @@ export class LoginPage {
   };
 
   isSubmit = false;
-  appTitle = COM_CONST.APP_TITLE;
+  appTitle = TConst.CONST.APP_TITLE;
 
   constructor(public navCtrl: NavController
               ,public navParams: NavParams

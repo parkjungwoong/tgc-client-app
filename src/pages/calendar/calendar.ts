@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {Events, ModalController, NavController, NavParams, Platform} from 'ionic-angular';
+import {Events, ModalController, NavController, NavParams} from 'ionic-angular';
 import {GamesService} from "../../services/gamesService";
 import {UserData} from "../../datas/user-data";
 import {eventVO} from "../../vo/eventVO";
@@ -8,6 +8,7 @@ import {GameVO} from "../../vo/gameVO";
 import {LoginPage} from "../logIn/login";
 import {UserInfo} from "../../vo/userInfo";
 import {EventPage} from "../event/event";
+import {ComService} from "../../services/comService";
 
 @Component({
   selector: 'page-calendar',
@@ -22,6 +23,8 @@ export class CalendarPage {
   calendarData:Array<any> = [];//최종 달력에 표시될 데이터
   colors:Array<string>;
 
+  clickCnt:number;
+
   date: any;
   daysInThisMonth: any;
   daysInLastMonth: any;
@@ -34,10 +37,13 @@ export class CalendarPage {
   constructor(public navCtrl: NavController
               ,public navParams: NavParams
               ,private gameService: GamesService
+              ,private comService: ComService
               ,private commonUtil:CommonUtils
               ,private modalCtrl: ModalController
               ,private events: Events
               ,private userData:UserData) {
+    this.clickCnt = 0;
+    this.comService.showBannerAd();
     //로그인 필요한 페이지
     this.userData.hasLoggedIn().then( isLogin=>{
       //로그인 되었으면 이벤트 조회 / 아니면 로그인 모달
@@ -47,8 +53,21 @@ export class CalendarPage {
     this.events.subscribe('user:login', value => {
       this.initCalendar();
     });
+  }
 
+  //페이지 벗어나면 광고 끔
+  ionViewWillLeave() {
+    this.comService.hideAdmob();
+  }
 
+  //3번 클릭하면 전면 광고 보여짐
+  checkAdShow(){
+    if(this.clickCnt == 2){
+      this.comService.showInterstitialAd();
+      this.clickCnt = 0;
+    } else {
+      this.clickCnt++;
+    }
   }
 
   initCalendar(){
@@ -72,23 +91,32 @@ export class CalendarPage {
         this.setListDay();
         //이벤트 데이터 세팅
         this.setListEvent();
+
+        if(this.eventList.length == 0) this.commonUtil.showAlert('','등록된 이벤트가 없습니다.').present();
       }
     });
   }
 
   //필수 데이터 조회
   async getInitData(){
+
+    //회원 정보 조회
     this.userInfo = await this.userData.getUserInfo();
-    this.subscribeList = await this.gameService.getMyList(this.userInfo.userNo,0);//구독중인 게임
+
+    //구독중인 게임
+    this.subscribeList = await this.gameService.getMyList(this.userInfo.userNo,0);
 
     if(this.subscribeList.length == 0) {
       this.commonUtil.showAlert('','검색 메뉴에서 게임 구독을 먼저 해주세요.').present();
       return false;
     }
-    this.eventList = await this.gameService.getMyEvent(this.userInfo.userNo);//게임 이벤트 리스트 조회
 
+    //게임 이벤트 리스트 조회
+    this.eventList = await this.gameService.getMyEvent(this.userInfo.userNo,this.date.toISOString());
+
+    //로컬 시간을 변경
     this.eventList = this.eventList.map(value => {
-      //로컬 시간을 변경
+
       let localDate = new Date(value.stDt);
       value.stDt = this.dateToYYYYMMDDNumber(localDate.getFullYear(),localDate.getMonth()+1,localDate.getDate());
 
@@ -113,6 +141,7 @@ export class CalendarPage {
 
   //이벤트 상세 보기
   eventDetail(eventInfo){
+    this.checkAdShow();
     if(this.commonUtil.isEmpty(eventInfo.eventId)) return;
     let selectedEvent = this.eventList.find((event) => {
       return event._id == eventInfo.eventId;

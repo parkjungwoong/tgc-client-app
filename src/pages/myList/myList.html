@@ -36,6 +36,9 @@
 
   <div [ngSwitch]="segmentType">
     <ion-list *ngSwitchCase="0">
+      <ion-item *ngIf="subscribeList.length == 0">
+        <h2>구독중인 소식이 없습니다.</h2>
+      </ion-item>
       <ion-item *ngFor="let item of subscribeList" tappable (click)="delMySubscribe(item)">
         <ion-thumbnail item-start>
           <img src="{{item.img}}"/>
@@ -46,6 +49,9 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="1">
+      <ion-item *ngIf="messageList.length == 0">
+        <h2>메시지가 없습니다.</h2>
+      </ion-item>
       <ion-item *ngFor="let item of messageList" tappable>
         <h2>{{item.title}}</h2>
         <p>{{item.content}}</p>

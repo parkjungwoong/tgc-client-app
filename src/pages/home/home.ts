@@ -4,7 +4,7 @@ import {GamesService} from "../../services/gamesService";
 import {GameVO} from "../../vo/gameVO";
 import {CommonUtils} from "../../common/commonUtils";
 import {GamePage} from "../game/game";
-import {COM_CONST} from "../../const/COM_CONST";
+import {TConst} from "../../const/TConst";
 
 @Component({
   selector: 'page-home',
@@ -35,7 +35,7 @@ export class HomePage {
 
   //더 보기
   async loadMore(infiniteScroll){
-    this.offset += COM_CONST.LIMIT;
+    this.offset += TConst.CONST.LIMIT;
     let newList = await this.gamesService.getList(this.offset);
 
     if(newList.length == 0) infiniteScroll.enable(false);

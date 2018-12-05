@@ -1,0 +1,21 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <button ion-button (click)="dismiss()">닫기</button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+
+  <ion-card>
+    <img src="{{bannerInfo.banner.img || '../../assets/imgs/default.png'}}" *ngIf="bannerInfo.banner.img"/>
+    <ion-card-content>
+      <ion-card-title>
+        {{bannerInfo.banner.title}}
+      </ion-card-title>
+      <p>
+        {{bannerInfo.banner.msg}}
+      </p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {ApiCall} from "../common/apiCall";
 import {CommonUtils} from "../common/commonUtils";
 import {GameVO} from "../vo/gameVO";
-import {SERVER} from "../const/SERVER";
+import {TConst} from "../const/TConst";
 import {eventVO} from "../vo/eventVO";
 
 @Injectable()
@@ -18,7 +18,7 @@ export class GamesService {
    * @returns {Promise<any>}
    */
   selectGameForID(gameId:string): Promise<any> {
-    let url = this.commonUtil.margeUrlParam(SERVER.SEARCH_GAME,[encodeURIComponent('id='+gameId)]);
+    let url = this.commonUtil.margeUrlParam(TConst.SERVER.SEARCH_GAME,[encodeURIComponent('id='+gameId)]);
 
     return this.apiCall.get( url,true).then(value => {
       //todo: 현재는 ID로만 검색해서 0번 인덱스만 반환
@@ -34,7 +34,7 @@ export class GamesService {
    * @returns {Promise<GameVO[]>} 구독 가능 게임 목록
    */
   getList(offset:number): Promise<GameVO[]> {
-    let url = SERVER.GET_GAME_LIST + this.commonUtil.getPagingQuery(offset,'');
+    let url = TConst.SERVER.GET_GAME_LIST + this.commonUtil.getPagingQuery(offset,'');
 
     return this.apiCall.get( url,true).then(value => {
       return value;
@@ -50,7 +50,7 @@ export class GamesService {
    * @returns {Promise<any>} 구독 목록
    */
   getMyList(userNo:string,offset:number): Promise<any> {
-    let url = this.commonUtil.margeUrlParam(SERVER.GET_MY_SUBSCRIBE,[userNo]);
+    let url = this.commonUtil.margeUrlParam(TConst.SERVER.GET_MY_SUBSCRIBE,[userNo]);
     //url += this.commonUtil.getPagingQuery(offset,'10');
 
     return this.apiCall.get( url,true).then(value => {
@@ -64,7 +64,7 @@ export class GamesService {
    * 게임 이벤트 조회
    */
   getGameEvent(gameId:string,offset:number):Promise<any> {
-    let url = this.commonUtil.margeUrlParam(SERVER.GET_GAME_EVENT,[gameId]);
+    let url = this.commonUtil.margeUrlParam(TConst.SERVER.GET_GAME_EVENT,[gameId]);
     url += this.commonUtil.getPagingQuery(offset,'');
 
     return this.apiCall.get( url,true).then(value => {
@@ -77,9 +77,9 @@ export class GamesService {
   /**
    * 구독 중인 게임 이벤트 조회
    */
-  getMyEvent(userId:string):Promise<eventVO[]> {
-    let url = this.commonUtil.margeUrlParam(SERVER.GET_MY_EVENT,[userId]);
-    url += '?iso='+encodeURIComponent(new Date().toISOString());
+  getMyEvent(userId:string,isoStr:string):Promise<eventVO[]> {
+    let url = this.commonUtil.margeUrlParam(TConst.SERVER.GET_MY_EVENT,[userId]);
+    url += '?iso='+encodeURIComponent(isoStr);
 
     return this.apiCall.get( url,true).then(value => {
       return value;
@@ -96,7 +96,7 @@ export class GamesService {
    * @returns {Promise<boolean>} 성공 여부
    */
   subscribe(gameId:string,gameName:string,userNo:string): Promise<boolean> {
-    return this.apiCall.post( SERVER.ADD_SUBSCRIBE,{ "_id" : gameId,"userNo" : userNo },true).then(value => {
+    return this.apiCall.post( TConst.SERVER.ADD_SUBSCRIBE,{ "_id" : gameId,"userNo" : userNo },true).then(value => {
         return true;
       }).catch( err => {
         return false;
@@ -110,7 +110,7 @@ export class GamesService {
    * @returns {Promise<boolean>} 성공 여부
    */
   delSubscribe(userNo:string,gameId:string): Promise<boolean> {
-    let url = this.commonUtil.margeUrlParam(SERVER.DEL_SUBSCRIBE,[userNo,gameId]);
+    let url = this.commonUtil.margeUrlParam(TConst.SERVER.DEL_SUBSCRIBE,[userNo,gameId]);
     return this.apiCall.delete( url,{ },true).then(value => {
         return true;
       }).catch( err => {
@@ -126,7 +126,7 @@ export class GamesService {
    * @returns {Promise<boolean>} 성공 여부
    */
   addRemind(userNo:string,eventId:string, alarmDay:number[]): Promise<boolean> {
-    return this.apiCall.post( SERVER.ADD_REMIND,{ "userNo" : userNo, "eventId" : eventId, "alarmDay" : alarmDay },true).then(value => {
+    return this.apiCall.post( TConst.SERVER.ADD_REMIND,{ "userNo" : userNo, "eventId" : eventId, "alarmDay" : alarmDay },true).then(value => {
       return true;
     }).catch( err => {
       return false;
